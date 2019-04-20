@@ -11,6 +11,13 @@ class HeadlineResponse {
         totalResults = json['totalResults'],
         articles = (json['articles'] as List).map((i) => Article.fromJson(i)).toList();
 
+  Map<String, dynamic> toJson() =>
+      {
+        'status': status,
+        'totalResults': totalResults,
+        'articles': articles
+      };
+
 }
 
 class Article {
