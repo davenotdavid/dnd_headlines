@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:dnd_headlines/app/DndHeadlinesApp.dart';
+import 'package:dnd_headlines/models/HeadlineResponse.dart';
 import 'package:dnd_headlines/res/Strings.dart';
 
 import 'package:firebase_remote_config/firebase_remote_config.dart';
@@ -34,7 +35,7 @@ class DndHeadlinesRootWidget extends StatelessWidget {
 Future<RemoteConfig> setupRemoteConfig() async {
   final RemoteConfig remoteConfig = await RemoteConfig.instance;
 
-  // Enables developer mode to relax fetch throttling.
+  /// Enables developer mode to relax fetch throttling.
   remoteConfig.setConfigSettings(RemoteConfigSettings(debugMode: true));
   remoteConfig.setDefaults(<String, dynamic>{
     Strings.newsApiKey: 'Error',
@@ -53,17 +54,22 @@ class WelcomeWidget extends AnimatedWidget {
       appBar: AppBar(
         title: Text(Strings.appName),
       ),
-      body: Center(child: Text('Hello world!')),
+      body: Center(child: Text('Hello world!')), /// TODO: Replace with a ListView widget
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.refresh),
           onPressed: () async {
             try {
-              // Using default duration to force fetching from remote server.
+
+              /// Using default duration to force fetching from remote server.
               await remoteConfig.fetch(expiration: const Duration(seconds: 0));
               await remoteConfig.activateFetched();
-              DndHeadlinesApp.log(remoteConfig.getString(Strings.newsApiKey));
+              
+              var apiKey = remoteConfig.getString(Strings.newsApiKey);
+              var client = NewsapiClient(apiKey);
+              await getNewsSources(client);
+
             } on FetchThrottledException catch (exception) {
-              // Fetch throttled.
+              /// Fetch throttled.
               print(exception);
             } catch (exception) {
               print(
@@ -73,4 +79,19 @@ class WelcomeWidget extends AnimatedWidget {
           }),
     );
   }
+}
+
+Future<Map<String, dynamic>> getNewsSources(NewsapiClient client) async {
+  var sourceList = ["bbc-news"];
+
+  /// JSON decoding occurs deep under the hood within the
+  /// following.
+  final response = await client.request(TopHeadlines(
+    sources: sourceList,
+    pageSize: 3 /// TODO: Temp
+  ));
+  var headline = HeadlineResponse.fromJson(response);
+  print(headline);
+
+  return response;
 }
