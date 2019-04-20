@@ -2,8 +2,8 @@ class DndHeadlinesApp {
 
   static final logTag = 'DND';
 
-  static void log(String message) {
-    print('$logTag: $message');
+  static void log(dynamic value) {
+    print('$logTag: $value');
   }
 
 }
