@@ -24,6 +24,13 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
 
+  # Flutter plugin for Firebase Remote Config. Update your application
+  # look and feel and behaviour without re-releasing.
+  firebase_remote_config: ^0.1.0+2
+
+  # News API (v2) client written in Dart.
+  newsapi_client: ^0.2.5+2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
