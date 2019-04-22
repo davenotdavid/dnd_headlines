@@ -46,6 +46,7 @@ Future<Headline> getNewsSources() async {
       pageSize: 10
   ));
   var headline = Headline.fromJson(response);
+  headline.log();
   //print(headline); TODO: Replace this with a log
 
   return headline;

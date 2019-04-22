@@ -2,10 +2,10 @@ import 'package:flutter/foundation.dart';
 
 /**
  * Sample headline response from the News API package client:
-  {
-    "status": "ok",
-    "totalResults": 10,
-    "articles": [
+    {
+      "status": "ok",
+      "totalResults": 10,
+      "articles": [
         {
           "source": {
             "id": "bbc-news",
@@ -74,10 +74,11 @@ class Headline extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// TODO: Create a helper to log properties and such here
+  void log() {
+    print('{\"status\": \"$status\", \"totalResults\": $totalResults, \"articles\": $articles}');
+  }
 
 }
-
 
 /// Child response serialization model
 class Article {
@@ -104,6 +105,11 @@ class Article {
         publishedAt = json['publishedAt'],
         content = json['content'];
 
+  @override
+  String toString() {
+    return '{\"source\": $source, \"author\": \"$author\", \"title\": \"$title\", \"description\": \"$description\", \"url\": \"$url\", \"urlToImage\": \"$urlToImage\", \"publishedAt\": \"$publishedAt\", \"content\": \"$content\"}';
+  }
+
 }
 
 /// Child response serialization model
@@ -117,5 +123,10 @@ class Source {
   Source.fromJson(Map<String, dynamic> json) :
         id = json['id'],
         name = json['name'];
+
+  @override
+  String toString() {
+    return '{\"id\": \"$id\", \"name\": \"$name\"}';
+  }
 
 }
