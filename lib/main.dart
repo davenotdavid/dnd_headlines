@@ -91,7 +91,7 @@ class HeadlineWidget extends AnimatedWidget {
             icon: Icon(Icons.settings),
             alignment: Alignment.centerRight,
             onPressed: () { 
-              DndHeadlinesApp.log('Settings button clicked'); 
+              DndHeadlinesApp.log('Settings button clicked');
             },
           )
         ],
