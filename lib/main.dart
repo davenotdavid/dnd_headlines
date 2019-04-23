@@ -47,7 +47,6 @@ Future<Headline> getNewsSources() async {
   ));
   var headline = Headline.fromJson(response);
   headline.log();
-  //print(headline); TODO: Replace this with a log
 
   return headline;
 }
@@ -88,15 +87,13 @@ class HeadlineWidget extends AnimatedWidget {
       appBar: AppBar(
         title: Text(Strings.appName),
       ),
-      body: ListView.builder(
-        itemCount: articles.length,
-        itemBuilder: (BuildContext context, int index) {
-          /// TODO: Empty state view
-          return articles.isNotEmpty
-              ? ListTile(title: Text(articles[index].title))
-              : Center(child: Text('No articles found'));
-        },
-      ),
+      body: articles.isNotEmpty 
+        ? ListView.builder(
+            itemCount: articles.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ListTile(title: Text(articles[index].title));
+            }) 
+        : Center(child: Text('No articles found'),),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.refresh),
           onPressed: () async {
