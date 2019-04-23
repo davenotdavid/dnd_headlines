@@ -86,6 +86,15 @@ class HeadlineWidget extends AnimatedWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(Strings.appName),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.settings),
+            alignment: Alignment.centerRight,
+            onPressed: () { 
+              DndHeadlinesApp.log('Settings button clicked'); 
+            },
+          )
+        ],
       ),
       body: articles.isNotEmpty 
         ? ListView.builder(
