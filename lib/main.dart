@@ -10,9 +10,9 @@ import 'package:newsapi_client/newsapi_client.dart';
 
 import 'settings.dart';
 
-void main() => runApp(DndHeadlinesRoute());
+void main() => runApp(DndHeadlinesRootWidget());
 
-class DndHeadlinesRoute extends StatelessWidget {
+class DndHeadlinesRootWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
