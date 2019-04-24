@@ -8,13 +8,16 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 
 import 'package:newsapi_client/newsapi_client.dart';
 
-void main() => runApp(DndHeadlinesRootWidget());
+import 'settings.dart';
 
-class DndHeadlinesRootWidget extends StatelessWidget {
+void main() => runApp(DndHeadlinesRoute());
+
+class DndHeadlinesRoute extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      /// TODO: Update this to the queried news source
       title: Strings.appName,
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -91,7 +94,10 @@ class HeadlineWidget extends AnimatedWidget {
             icon: Icon(Icons.settings),
             alignment: Alignment.centerRight,
             onPressed: () { 
-              DndHeadlinesApp.log('Settings button clicked');
+              Navigator.push(
+                context, 
+                MaterialPageRoute(builder: (context) => SettingsRoute())
+              );
             },
           )
         ],
