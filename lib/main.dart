@@ -17,7 +17,6 @@ class DndHeadlinesRootWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      /// TODO: Update this to the queried news source
       title: Strings.appName,
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -25,9 +24,13 @@ class DndHeadlinesRootWidget extends StatelessWidget {
       home: FutureBuilder<Headline>(
         future: getNewsSources(),
         builder: (BuildContext context, AsyncSnapshot<Headline> snapshot) {
-          return snapshot.hasData
-              ? HeadlineWidget(headline: snapshot.data)
-              : Container();
+          if (snapshot.hasData) {
+            return HeadlineWidget(headline: snapshot.data);
+          } else if (snapshot.hasError) {
+            return Center(child: Text(Strings.errorMsgGetNewsSources));
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
         }
       ),
     );
@@ -88,6 +91,7 @@ class HeadlineWidget extends AnimatedWidget {
 
     return Scaffold(
       appBar: AppBar(
+        /// TODO: Update this to the queried news source
         title: Text(Strings.appName),
         actions: <Widget>[
           IconButton(
