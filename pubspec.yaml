@@ -31,6 +31,10 @@ dependencies:
   # News API (v2) client written in Dart.
   newsapi_client: ^0.2.5+2
 
+  # Flutter plugin for reading and writing simple key-value pairs.
+  # Wraps NSUserDefaults on iOS and SharedPreferences on Android.
+  shared_preferences: ^0.5.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

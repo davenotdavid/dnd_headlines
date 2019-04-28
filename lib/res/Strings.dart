@@ -9,5 +9,8 @@ class Strings {
   static final String errorMsgGetNewsSources = 'Error retrieving headlines. Please try again later.';
 
   static final String newsApiKey = 'news_api_key';
+  static final String newsSourcePrefKey = 'news_source_pref_key';
+
+  static final String newsSourcePublisherDefault = 'google-news';
 
 }

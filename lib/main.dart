@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'package:dnd_headlines/app/DndHeadlinesApp.dart';
 import 'package:dnd_headlines/models/HeadlineResponse.dart';
+import 'package:dnd_headlines/res/Constants.dart';
 import 'package:dnd_headlines/res/Strings.dart';
 
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 
 import 'package:newsapi_client/newsapi_client.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'settings.dart';
 
@@ -38,18 +41,26 @@ class DndHeadlinesRootWidget extends StatelessWidget {
 
 }
 
+Future<String> getNewsPrefValue() async {
+  var prefs = await SharedPreferences.getInstance();
+  return prefs.getString(Strings.newsSourcePrefKey) ?? Strings.newsSourcePublisherDefault;
+}
+
 Future<Headline> getNewsSources() async {
   var remoteConfig = await getRemoteConfig();
 
   var apiKey = remoteConfig.getString(Strings.newsApiKey);
   var client = NewsapiClient(apiKey);
-  var sourceList = ['fox-news'];
+  var sourceList = [Strings.newsSourcePublisherDefault];
+  await getNewsPrefValue()
+      .then((value) => sourceList[0] = value)
+      .catchError((error) => DndHeadlinesApp.log(error));
 
   /// JSON decoding occurs deep under the hood within the following
   /// News API package implementation.
   final response = await client.request(TopHeadlines(
       sources: sourceList,
-      pageSize: 10
+      pageSize: Constants.defaultPageSize
   ));
   var headline = Headline.fromJson(response);
   headline.log();
@@ -112,7 +123,7 @@ class HeadlineWidget extends AnimatedWidget {
             itemBuilder: (BuildContext context, int index) {
               return ListTile(title: Text(articles[index].title));
             }) 
-        : Center(child: Text('No articles found'),),
+        : Center(child: Text('No articles found')),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.refresh),
           onPressed: () async {

@@ -75,7 +75,8 @@ class Headline extends ChangeNotifier {
   }
 
   void log() {
-    print('{\"status\": \"$status\", \"totalResults\": $totalResults, \"articles\": $articles}');
+    print('{\"status\": \"$status\", \"totalResults\": $totalResults, '
+        '\"articles\": $articles}');
   }
 
 }
@@ -107,7 +108,10 @@ class Article {
 
   @override
   String toString() {
-    return '{\"source\": $source, \"author\": \"$author\", \"title\": \"$title\", \"description\": \"$description\", \"url\": \"$url\", \"urlToImage\": \"$urlToImage\", \"publishedAt\": \"$publishedAt\", \"content\": \"$content\"}';
+    return '{\"source\": $source, \"author\": \"$author\", \"title\": '
+        '\"$title\", \"description\": \"$description\", \"url\": \"$url\", '
+        '\"urlToImage\": \"$urlToImage\", \"publishedAt\": \"$publishedAt\", '
+        '\"content\": \"$content\"}';
   }
 
 }
