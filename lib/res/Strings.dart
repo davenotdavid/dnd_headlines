@@ -7,6 +7,7 @@ class Strings {
 
   static final String errorMsgExceptionRemoteConfig = 'Unable to fetch remote config. Cached or default values will be used.';
   static final String errorMsgGetNewsSources = 'Error retrieving headlines. Please try again later.';
+  static final String errorMsgHeadlinePublisherName = 'Error retrieving Headline object publisher\'s name.';
 
   static final String newsApiKey = 'news_api_key';
   static final String newsSourcePrefKey = 'news_source_pref_key';

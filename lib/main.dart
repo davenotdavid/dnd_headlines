@@ -102,8 +102,7 @@ class HeadlineWidget extends AnimatedWidget {
 
     return Scaffold(
       appBar: AppBar(
-        /// TODO: Update this to the queried news source
-        title: Text(Strings.appName),
+        title: Text(headline.getPublisherName() ?? Strings.appName),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.settings),
