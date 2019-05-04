@@ -16,6 +16,9 @@ import 'package:newsapi_client/newsapi_client.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// Class fields
+String _sourceId;
+
 void main() => runApp(DndHeadlinesRootWidget());
 
 class DndHeadlinesRootWidget extends StatelessWidget {
@@ -28,7 +31,7 @@ class DndHeadlinesRootWidget extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: FutureBuilder<Headline>(
-        future: getNewsSources(),
+        future: initDataAndGetHeadlines(),
         builder: (BuildContext context, AsyncSnapshot<Headline> snapshot) {
           if (snapshot.hasData) {
             return HeadlineWidget(headline: snapshot.data);
@@ -40,6 +43,14 @@ class DndHeadlinesRootWidget extends StatelessWidget {
         }
       ),
     );
+  }
+
+  Future<Headline> initDataAndGetHeadlines() async {
+    await getNewsSourcePrefId()
+        .then((sourcePrefId) => _sourceId = sourcePrefId)
+        .catchError((error) => DndHeadlinesApp.log(error));
+
+    return getNewsSources(_sourceId);
   }
 
 }
@@ -80,10 +91,8 @@ class HeadlineWidget extends AnimatedWidget {
         : Center(child: Text(Strings.errorEmptyViewGetNewsSources)),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.refresh),
-          onPressed: () async {
-            await getNewsSources()
-                .then((headline) => this.headline.setHeadline(headline))
-                .catchError((error) => DndHeadlinesApp.log(error));
+          onPressed: () {
+            onRefreshFabClicked();
           }
       ),
     );
@@ -106,10 +115,16 @@ class HeadlineWidget extends AnimatedWidget {
   }
 
   void onNewsSourceSelected(List<Source> newsSources, List value) async {
-    final sourceId = newsSources[value[0]].id;
-    await setNewsSourcePrefId(sourceId);
+    _sourceId = newsSources[value[0]].id;
+    await setNewsSourcePrefId(_sourceId);
 
-    await getNewsSources()
+    await getNewsSources(_sourceId)
+        .then((headline) => this.headline.setHeadline(headline))
+        .catchError((error) => DndHeadlinesApp.log(error));
+  }
+
+  void onRefreshFabClicked() async {
+    await getNewsSources(_sourceId)
         .then((headline) => this.headline.setHeadline(headline))
         .catchError((error) => DndHeadlinesApp.log(error));
   }
@@ -137,19 +152,16 @@ Future<void> setNewsSourcePrefId(String sourceId) async {
   prefs.setString(Strings.newsSourcePrefKey, sourceId);
 }
 
-/// TODO: Include a param
-Future<Headline> getNewsSources() async {
+Future<Headline> getNewsSources(String sourceId) async {
   final remoteConfig = await getRemoteConfig();
 
+  // TODO: Possibly cache the following
   final apiKey = remoteConfig.getString(Strings.newsApiKey);
   final client = NewsapiClient(apiKey);
-  final sourceList = [Strings.newsSourcePrefIdDefault];
-  await getNewsSourcePrefId()
-      .then((value) => sourceList[0] = value)
-      .catchError((error) => DndHeadlinesApp.log(error));
 
   /// JSON decoding occurs deep under the hood within the following
   /// News API package implementation.
+  final sourceList = [sourceId ?? Strings.newsSourcePrefIdDefault];
   final response = await client.request(TopHeadlines(
       sources: sourceList, /// Source ID as the identifier
       pageSize: Constants.defaultPageSize
