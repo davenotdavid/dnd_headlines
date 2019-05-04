@@ -28,6 +28,11 @@ dependencies:
   # look and feel and behaviour without re-releasing.
   firebase_remote_config: ^0.1.0+2
 
+  # Flutter plugin picker. Includes NumberPicker, DateTimePicker,
+  # ArrayPicker, and default linkage Picker. Provides flexible parameters
+  # to meet various needs.
+  flutter_picker: ^1.0.10
+
   # News API (v2) client written in Dart.
   newsapi_client: ^0.2.5+2
 
@@ -81,3 +86,6 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages
+
+  assets:
+    - assets/news_sources.json

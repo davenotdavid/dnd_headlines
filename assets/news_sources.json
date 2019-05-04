@@ -1,0 +1,16 @@
+[
+
+  {
+    "id": "ars-technica",
+    "name": "Ars Technica"
+  },
+  {
+    "id": "fox-news",
+    "name": "Fox News"
+  },
+  {
+    "id": "google-news",
+    "name": "Google News (default)"
+  }
+
+]
