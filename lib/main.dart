@@ -17,6 +17,7 @@ import 'package:newsapi_client/newsapi_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Class fields
+String _newsApiKey;
 String _sourceId;
 
 void main() => runApp(DndHeadlinesRootWidget());
@@ -46,11 +47,14 @@ class DndHeadlinesRootWidget extends StatelessWidget {
   }
 
   Future<Headline> initDataAndGetHeadlines() async {
+    final remoteConfig = await getRemoteConfig();
+    _newsApiKey = remoteConfig.getString(Strings.newsApiKey);
+
     await getNewsSourcePrefId()
         .then((sourcePrefId) => _sourceId = sourcePrefId)
         .catchError((error) => DndHeadlinesApp.log(error));
 
-    return getNewsSources(_sourceId);
+    return getNewsSources(_newsApiKey, _sourceId);
   }
 
 }
@@ -72,12 +76,8 @@ class HeadlineWidget extends AnimatedWidget {
           IconButton(
             icon: Icon(Icons.settings),
             alignment: Alignment.centerRight,
-            onPressed: () { 
+            onPressed: () {
               _showPickerDialog(context);
-              /*Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SettingsRoute())
-              );*/
             },
           )
         ],
@@ -118,13 +118,13 @@ class HeadlineWidget extends AnimatedWidget {
     _sourceId = newsSources[value[0]].id;
     await setNewsSourcePrefId(_sourceId);
 
-    await getNewsSources(_sourceId)
+    await getNewsSources(_newsApiKey, _sourceId)
         .then((headline) => this.headline.setHeadline(headline))
         .catchError((error) => DndHeadlinesApp.log(error));
   }
 
   void onRefreshFabClicked() async {
-    await getNewsSources(_sourceId)
+    await getNewsSources(_newsApiKey, _sourceId)
         .then((headline) => this.headline.setHeadline(headline))
         .catchError((error) => DndHeadlinesApp.log(error));
   }
@@ -141,7 +141,6 @@ Future<List<Source>> _loadNewsSourcesJson(BuildContext context) async {
   return newsSources;
 }
 
-/// TODO: This should only be called during an initial session
 Future<String> getNewsSourcePrefId() async {
   final prefs = await SharedPreferences.getInstance();
   return prefs.getString(Strings.newsSourcePrefKey) ?? Strings.newsSourcePrefIdDefault;
@@ -152,15 +151,16 @@ Future<void> setNewsSourcePrefId(String sourceId) async {
   prefs.setString(Strings.newsSourcePrefKey, sourceId);
 }
 
-Future<Headline> getNewsSources(String sourceId) async {
-  final remoteConfig = await getRemoteConfig();
-
-  // TODO: Possibly cache the following
-  final apiKey = remoteConfig.getString(Strings.newsApiKey);
-  final client = NewsapiClient(apiKey);
+Future<Headline> getNewsSources(String apiKey, String sourceId) async {
+  if (apiKey == null || apiKey.isEmpty) {
+    /// Ensures that the empty view will be set from the
+    /// calling widget via [Headline]'s listen notifier.
+    return Headline(null, null, List<Article>());
+  }
 
   /// JSON decoding occurs deep under the hood within the following
   /// News API package implementation.
+  final client = NewsapiClient(apiKey);
   final sourceList = [sourceId ?? Strings.newsSourcePrefIdDefault];
   final response = await client.request(TopHeadlines(
       sources: sourceList, /// Source ID as the identifier
@@ -178,7 +178,7 @@ Future<RemoteConfig> getRemoteConfig() async {
   /// Enables developer mode to relax fetch throttling.
   remoteConfig.setConfigSettings(RemoteConfigSettings(debugMode: true));
   remoteConfig.setDefaults(<String, dynamic>{
-    Strings.newsApiKey: 'Error',
+    Strings.newsApiKey: "",
   });
 
   try {
