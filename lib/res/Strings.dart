@@ -1,3 +1,4 @@
+/// String res version
 class Strings {
 
   // TODO: Investigate if obfuscating name conventions for build types/flavors can be done exclusively via Flutter or not

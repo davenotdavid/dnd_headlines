@@ -22,6 +22,11 @@ String _sourceId;
 
 void main() => runApp(DndHeadlinesRootWidget());
 
+/// Root widget responsible for laying out the home screen
+/// of the app. Aside from theme and styling, a [FutureBuilder]
+/// is used to reactively build out the widget as soon as the
+/// latest [AsyncSnapshot]'s tasks are completed (with the
+/// [Future] returned.
 class DndHeadlinesRootWidget extends StatelessWidget {
 
   @override
@@ -46,6 +51,8 @@ class DndHeadlinesRootWidget extends StatelessWidget {
     );
   }
 
+  /// Inits field instances used throughout this app prior to
+  /// retrieving headline data during the initial session.
   Future<Headline> initDataAndGetHeadlines() async {
     final remoteConfig = await getRemoteConfig();
     _newsApiKey = remoteConfig.getString(Strings.newsApiKey);
@@ -59,12 +66,20 @@ class DndHeadlinesRootWidget extends StatelessWidget {
 
 }
 
+/// A subclass of the "listenable" widget, [AnimatedWidget],
+/// that rebuilds itself every time there's a diff between
+/// [Headline] data. This is possible since [Headline]
+/// implements a listenable.
 class HeadlineWidget extends AnimatedWidget {
 
   HeadlineWidget({this.headline}) : super(listenable: headline);
 
   final Headline headline;
 
+  /// Lays out the top [Headline] news data via a [ListView]
+  /// should there be data, otherwise an empty view is shown.
+  /// A user can also change the news publisher (which will
+  /// fire off the listener), or maybe refresh the data.
   @override
   Widget build(BuildContext context) {
     final articles = headline.articles ?? [];
@@ -98,6 +113,8 @@ class HeadlineWidget extends AnimatedWidget {
     );
   }
 
+  /// Displays a [Picker] dialog of a list of news publisher options
+  /// after decoding the news source JSON metadata.
   void _showPickerDialog(BuildContext context) async {
     final newsSources = List<Source>();
     await _loadNewsSourcesJson(context)
@@ -114,6 +131,9 @@ class HeadlineWidget extends AnimatedWidget {
     ).showDialog(context);
   }
 
+  /// Handles the news publisher selected from the [Picker] such as
+  /// retrieving [Headline] data with the selected source's ID (and sets
+  /// and caches it), and then rebuilds this widget with new data.
   void onNewsSourceSelected(List<Source> newsSources, List value) async {
     _sourceId = newsSources[value[0]].id;
     await setNewsSourcePrefId(_sourceId);
@@ -123,6 +143,8 @@ class HeadlineWidget extends AnimatedWidget {
         .catchError((error) => DndHeadlinesApp.log(error));
   }
 
+  /// Handles making another GET call, and only rebuilds this widget
+  /// if there's a diff between the old and new returned data.
   void onRefreshFabClicked() async {
     await getNewsSources(_newsApiKey, _sourceId)
         .then((headline) => this.headline.setHeadline(headline))
@@ -133,6 +155,8 @@ class HeadlineWidget extends AnimatedWidget {
 
 /// TODO: The following helper functions are used universally, so move them somewhere more reasonable (i.e. API interface, service layer, and etc.)
 
+/// Returns a list of [Source]s after decoding the static JSON
+/// metadata file.
 Future<List<Source>> _loadNewsSourcesJson(BuildContext context) async {
   String data = await DefaultAssetBundle.of(context).loadString(Strings.newsSourceJsonPath);
   final jsonResult = json.decode(data);
@@ -141,16 +165,19 @@ Future<List<Source>> _loadNewsSourcesJson(BuildContext context) async {
   return newsSources;
 }
 
+/// Returns the cached news source publisher ID.
 Future<String> getNewsSourcePrefId() async {
   final prefs = await SharedPreferences.getInstance();
   return prefs.getString(Strings.newsSourcePrefKey) ?? Strings.newsSourcePrefIdDefault;
 }
 
+/// Caches the news source publisher ID for future sessions.
 Future<void> setNewsSourcePrefId(String sourceId) async {
   final prefs = await SharedPreferences.getInstance();
   prefs.setString(Strings.newsSourcePrefKey, sourceId);
 }
 
+/// GET call for news source data.
 Future<Headline> getNewsSources(String apiKey, String sourceId) async {
   if (apiKey == null || apiKey.isEmpty) {
     /// Ensures that the empty view will be set from the
@@ -172,6 +199,8 @@ Future<Headline> getNewsSources(String apiKey, String sourceId) async {
   return headline;
 }
 
+/// Getter for Firebase [RemoteConfig] for the securely stored
+/// News API key.
 Future<RemoteConfig> getRemoteConfig() async {
   final RemoteConfig remoteConfig = await RemoteConfig.instance;
 
