@@ -34,7 +34,7 @@ class DndHeadlinesRootWidget extends StatelessWidget {
     return MaterialApp(
       title: Strings.appName,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.blueGrey,
       ),
       home: FutureBuilder<Headline>(
         future: initDataAndGetHeadlines(),
