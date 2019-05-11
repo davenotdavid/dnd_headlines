@@ -7,14 +7,12 @@ import 'package:dnd_headlines/app/DndHeadlinesApp.dart';
 import 'package:dnd_headlines/model/HeadlineResponse.dart';
 import 'package:dnd_headlines/util/Constants.dart';
 import 'package:dnd_headlines/util/HelperFunctions.dart';
-import 'package:dnd_headlines/res/Dimens.dart';
 import 'package:dnd_headlines/res/Strings.dart';
 
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:newsapi_client/newsapi_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 /// Class fields
 String _newsApiKey;
@@ -37,7 +35,7 @@ class DndHeadlinesRootWidget extends StatelessWidget {
         primarySwatch: Colors.blueGrey,
       ),
       home: FutureBuilder<Headline>(
-        future: initDataAndGetHeadlines(),
+        future: _initDataAndGetHeadlines(),
         builder: (BuildContext context, AsyncSnapshot<Headline> snapshot) {
           if (snapshot.hasData) {
             return HeadlineWidget(headline: snapshot.data);
@@ -53,7 +51,7 @@ class DndHeadlinesRootWidget extends StatelessWidget {
 
   /// Inits field instances used throughout this app prior to
   /// retrieving headline data during the initial session.
-  Future<Headline> initDataAndGetHeadlines() async {
+  Future<Headline> _initDataAndGetHeadlines() async {
     final remoteConfig = await getRemoteConfig();
     _newsApiKey = remoteConfig.getString(Strings.newsApiKey);
 
@@ -82,8 +80,6 @@ class HeadlineWidget extends AnimatedWidget {
   /// fire off the listener), or maybe refresh the data.
   @override
   Widget build(BuildContext context) {
-    final articles = headline.articles ?? [];
-
     return Scaffold(
       appBar: AppBar(
         title: Text(headline.getPublisherName() ?? Strings.appName),
@@ -97,29 +93,43 @@ class HeadlineWidget extends AnimatedWidget {
           )
         ],
       ),
-      body: articles.isNotEmpty 
-        ? ListView.builder(
-            itemCount: articles.length,
-            itemBuilder: (BuildContext context, int index) {
-              final article = articles[index];
-
-              return ListTile(
-                title: Text(article.title),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => WebRoute(article: article)),
-                  );
-                }
-              );
-            }) 
-        : Center(child: Text(Strings.errorEmptyViewGetNewsSources)),
+      body: _getHeadlineListViewWidget(),
       floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.refresh),
-          onPressed: () {
-            onRefreshFabClicked();
-          }
+        child: const Icon(Icons.refresh),
+        onPressed: () {
+          _onRefreshFabClicked();
+        }
       ),
+    );
+  }
+
+  Widget _getHeadlineListViewWidget() {
+    final articles = headline.articles ?? [];
+
+    return RefreshIndicator(
+      child: articles.isNotEmpty
+        ? ListView.builder(
+          itemCount: articles.length,
+          physics: const AlwaysScrollableScrollPhysics(),
+          itemBuilder: (BuildContext context, int index) {
+            final article = articles[index];
+
+            return ListTile(
+              title: Text(article.title),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => WebRoute(article: article)),
+                );
+              }
+            );
+          })
+        : Center(child: Text(Strings.errorEmptyViewGetNewsSources)),
+      onRefresh: () async {
+        await getNewsSources(_newsApiKey, _sourceId)
+            .then((headline) => this.headline.setHeadline(headline))
+            .catchError((error) => DndHeadlinesApp.log(error));
+      }
     );
   }
 
@@ -127,24 +137,24 @@ class HeadlineWidget extends AnimatedWidget {
   /// after decoding the news source JSON metadata.
   void _showPickerDialog(BuildContext context) async {
     final newsSources = List<Source>();
-    await _loadNewsSourcesJson(context)
+    await loadNewsSourcesJson(context)
         .then((sources) => newsSources.addAll(sources))
         .catchError((error) => DndHeadlinesApp.log(error));
 
     new Picker(
-        adapter: PickerDataAdapter<String>(pickerdata: HelperFunctions.getSourceNames(newsSources)),
-        hideHeader: true,
-        title: new Text(Strings.newsSourcePickerDialogTitle),
-        onConfirm: (Picker picker, List value) {
-          onNewsSourceSelected(newsSources, value);
-        }
+      adapter: PickerDataAdapter<String>(pickerdata: HelperFunctions.getSourceNames(newsSources)),
+      hideHeader: true,
+      title: new Text(Strings.newsSourcePickerDialogTitle),
+      onConfirm: (Picker picker, List value) {
+        _onNewsSourceSelected(newsSources, value);
+      }
     ).showDialog(context);
   }
 
   /// Handles the news publisher selected from the [Picker] such as
   /// retrieving [Headline] data with the selected source's ID (and sets
   /// and caches it), and then rebuilds this widget with new data.
-  void onNewsSourceSelected(List<Source> newsSources, List value) async {
+  void _onNewsSourceSelected(List<Source> newsSources, List value) async {
     _sourceId = newsSources[value[0]].id;
     await setNewsSourcePrefId(_sourceId);
 
@@ -155,7 +165,7 @@ class HeadlineWidget extends AnimatedWidget {
 
   /// Handles making another GET call, and only rebuilds this widget
   /// if there's a diff between the old and new returned data.
-  void onRefreshFabClicked() async {
+  void _onRefreshFabClicked() async {
     await getNewsSources(_newsApiKey, _sourceId)
         .then((headline) => this.headline.setHeadline(headline))
         .catchError((error) => DndHeadlinesApp.log(error));
@@ -167,7 +177,7 @@ class HeadlineWidget extends AnimatedWidget {
 
 /// Returns a list of [Source]s after decoding the static JSON
 /// metadata file.
-Future<List<Source>> _loadNewsSourcesJson(BuildContext context) async {
+Future<List<Source>> loadNewsSourcesJson(BuildContext context) async {
   String data = await DefaultAssetBundle.of(context).loadString(Strings.newsSourceJsonPath);
   final jsonResult = json.decode(data);
   final newsSources = (jsonResult as List).map((i) => Source.fromJson(i)).toList();
