@@ -1,20 +1,20 @@
 import 'dart:convert';
 
+import 'package:dnd_headlines/webview.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dnd_headlines/app/DndHeadlinesApp.dart';
 import 'package:dnd_headlines/model/HeadlineResponse.dart';
 import 'package:dnd_headlines/util/Constants.dart';
 import 'package:dnd_headlines/util/HelperFunctions.dart';
+import 'package:dnd_headlines/res/Dimens.dart';
 import 'package:dnd_headlines/res/Strings.dart';
 
 import 'package:firebase_remote_config/firebase_remote_config.dart';
-
 import 'package:flutter_picker/flutter_picker.dart';
-
 import 'package:newsapi_client/newsapi_client.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 /// Class fields
 String _newsApiKey;
@@ -72,9 +72,9 @@ class DndHeadlinesRootWidget extends StatelessWidget {
 /// implements a listenable.
 class HeadlineWidget extends AnimatedWidget {
 
-  HeadlineWidget({this.headline}) : super(listenable: headline);
-
   final Headline headline;
+
+  HeadlineWidget({this.headline}) : super(listenable: headline);
 
   /// Lays out the top [Headline] news data via a [ListView]
   /// should there be data, otherwise an empty view is shown.
@@ -101,7 +101,17 @@ class HeadlineWidget extends AnimatedWidget {
         ? ListView.builder(
             itemCount: articles.length,
             itemBuilder: (BuildContext context, int index) {
-              return ListTile(title: Text(articles[index].title));
+              final article = articles[index];
+
+              return ListTile(
+                title: Text(article.title),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => WebRoute(article: article)),
+                  );
+                }
+              );
             }) 
         : Center(child: Text(Strings.errorEmptyViewGetNewsSources)),
       floatingActionButton: FloatingActionButton(

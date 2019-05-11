@@ -40,6 +40,10 @@ dependencies:
   # Wraps NSUserDefaults on iOS and SharedPreferences on Android.
   shared_preferences: ^0.5.2
 
+  # A Flutter plugin that provides a WebView widget on Android (via a WebView)
+  # and iOS (via a WKWebView). Currently in dev preview.
+  webview_flutter: ^0.3.6
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
