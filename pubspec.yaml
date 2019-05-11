@@ -41,7 +41,8 @@ dependencies:
   shared_preferences: ^0.5.2
 
   # A Flutter plugin that provides a WebView widget on Android (via a WebView)
-  # and iOS (via a WKWebView). Currently in dev preview.
+  # and iOS (via a WKWebView). Currently in dev preview stage - doesn't seem to
+  # render as well on iOS.
   webview_flutter: ^0.3.6
 
 dev_dependencies:
