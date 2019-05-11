@@ -17,8 +17,9 @@ class WebRoute extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(article.title)),
       body: WebView(
-        /*onWebViewCreated: WebViewCreatedCallback(WebViewController()),*/
-        initialUrl: article.url
+        //onWebViewCreated: WebViewCreatedCallback(WebViewController()),
+        initialUrl: article.url,
+        javascriptMode: JavascriptMode.unrestricted
       )
     );
   }
