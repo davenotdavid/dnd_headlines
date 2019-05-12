@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dnd_headlines/res/Dimens.dart';
 import 'package:dnd_headlines/route/webview.dart';
 import 'package:flutter/material.dart';
 
@@ -117,6 +118,12 @@ class HeadlineWidget extends AnimatedWidget {
             return ListTile(
               title: Text(article.title),
               subtitle: Text(HelperFunctions.getTimeDifference(article.publishedAt)),
+              contentPadding: EdgeInsets.fromLTRB(
+                  Dimens.paddingDefault,
+                  (index == 0) ? Dimens.paddingOneHalf : 0.0,
+                  Dimens.paddingDefault,
+                  Dimens.paddingOneHalf
+              ),
               onTap: () {
                 Navigator.push(
                   context,
