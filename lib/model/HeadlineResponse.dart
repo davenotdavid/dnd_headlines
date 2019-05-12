@@ -1,5 +1,8 @@
 import 'package:flutter/foundation.dart';
 
+import 'package:dnd_headlines/app/DndHeadlinesApp.dart';
+import 'package:dnd_headlines/res/Strings.dart';
+
 /**
  * Sample headline response from the News API package client:
     {
@@ -63,6 +66,20 @@ class Headline extends ChangeNotifier {
         'articles': articles
       };
 
+  /// Helper function used to retrieve a news source publisher's
+  /// name (i.e. Google News).
+  String getPublisherName() {
+    try {
+      var article = articles.first;
+      var sourceName = article.source.name;
+      return sourceName;
+    } on StateError {
+      DndHeadlinesApp.log(Strings.errorMsgHeadlinePublisherName);
+    }
+
+    return null;
+  }
+
   /// Notifies all registered listeners only if there's a diff
   /// between an existing [Headline] object and the following
   /// object param.
@@ -75,7 +92,8 @@ class Headline extends ChangeNotifier {
   }
 
   void log() {
-    print('{\"status\": \"$status\", \"totalResults\": $totalResults, \"articles\": $articles}');
+    print('{\"status\": \"$status\", \"totalResults\": $totalResults, '
+        '\"articles\": $articles}');
   }
 
 }
@@ -107,7 +125,10 @@ class Article {
 
   @override
   String toString() {
-    return '{\"source\": $source, \"author\": \"$author\", \"title\": \"$title\", \"description\": \"$description\", \"url\": \"$url\", \"urlToImage\": \"$urlToImage\", \"publishedAt\": \"$publishedAt\", \"content\": \"$content\"}';
+    return '{\"source\": $source, \"author\": \"$author\", \"title\": '
+        '\"$title\", \"description\": \"$description\", \"url\": \"$url\", '
+        '\"urlToImage\": \"$urlToImage\", \"publishedAt\": \"$publishedAt\", '
+        '\"content\": \"$content\"}';
   }
 
 }

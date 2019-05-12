@@ -28,8 +28,22 @@ dependencies:
   # look and feel and behaviour without re-releasing.
   firebase_remote_config: ^0.1.0+2
 
+  # Flutter plugin picker. Includes NumberPicker, DateTimePicker,
+  # ArrayPicker, and default linkage Picker. Provides flexible parameters
+  # to meet various needs.
+  flutter_picker: ^1.0.10
+
   # News API (v2) client written in Dart.
   newsapi_client: ^0.2.5+2
+
+  # Flutter plugin for reading and writing simple key-value pairs.
+  # Wraps NSUserDefaults on iOS and SharedPreferences on Android.
+  shared_preferences: ^0.5.2
+
+  # A Flutter plugin that provides a WebView widget on Android (via a WebView)
+  # and iOS (via a WKWebView). Currently in dev preview stage - doesn't seem to
+  # render as well on iOS.
+  webview_flutter: ^0.3.6
 
 dev_dependencies:
   flutter_test:
@@ -77,3 +91,6 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages
+
+  assets:
+    - assets/news_sources.json

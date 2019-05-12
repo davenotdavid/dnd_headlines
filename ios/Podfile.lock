@@ -38,6 +38,8 @@ PODS:
     - "GoogleUtilities/NSData+zlib (~> 5.2)"
     - Protobuf (~> 3.5)
   - Flutter (1.0.0)
+  - flutter_picker (0.0.1):
+    - Flutter
   - GoogleAppMeasurement (5.8.1):
     - GoogleUtilities/AppDelegateSwizzler (~> 5.2)
     - GoogleUtilities/MethodSwizzler (~> 5.2)
@@ -68,10 +70,17 @@ PODS:
   - nanopb/decode (0.3.901)
   - nanopb/encode (0.3.901)
   - Protobuf (3.7.0)
+  - shared_preferences (0.0.1):
+    - Flutter
+  - webview_flutter (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - firebase_remote_config (from `.symlinks/plugins/firebase_remote_config/ios`)
   - Flutter (from `.symlinks/flutter/ios`)
+  - flutter_picker (from `.symlinks/plugins/flutter_picker/ios`)
+  - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
+  - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -91,6 +100,12 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_remote_config/ios"
   Flutter:
     :path: ".symlinks/flutter/ios"
+  flutter_picker:
+    :path: ".symlinks/plugins/flutter_picker/ios"
+  shared_preferences:
+    :path: ".symlinks/plugins/shared_preferences/ios"
+  webview_flutter:
+    :path: ".symlinks/plugins/webview_flutter/ios"
 
 SPEC CHECKSUMS:
   Firebase: 0c8cf33f266410c61ab3e2265cfa412200351d9c
@@ -101,10 +116,13 @@ SPEC CHECKSUMS:
   FirebaseInstanceID: a122b0c258720cf250551bb2bedf48c699f80d90
   FirebaseRemoteConfig: 7e11c65f0769c09bff6947997c209515058c5318
   Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
+  flutter_picker: 8ff0d7440b4e8327fcc9e6b21a39ef9369e697c7
   GoogleAppMeasurement: ffe513e90551844a739e7bcbb1d2aca1c28a4338
   GoogleUtilities: f44b068df02195da10409f415bd8c98439cd70fa
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   Protobuf: 7a877b7f3e5964e3fce995e2eb323dbc6831bb5a
+  shared_preferences: 1feebfa37bb57264736e16865e7ffae7fc99b523
+  webview_flutter: 1aa7604e6cdb451a9b7ed2c37d5454c0b440246b
 
 PODFILE CHECKSUM: ebd43b443038e611b86ede96e613bd6033c49497
 
