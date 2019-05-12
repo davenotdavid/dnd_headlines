@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import 'model/HeadlineResponse.dart';
+import 'package:dnd_headlines/model/HeadlineResponse.dart';
 
 WebViewController _controller;
 class WebRoute extends StatelessWidget {

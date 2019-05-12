@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:dnd_headlines/webview.dart';
+import 'package:dnd_headlines/route/webview.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dnd_headlines/app/DndHeadlinesApp.dart';
@@ -116,6 +116,7 @@ class HeadlineWidget extends AnimatedWidget {
 
             return ListTile(
               title: Text(article.title),
+              subtitle: Text(HelperFunctions.getTimeDifference(article.publishedAt)),
               onTap: () {
                 Navigator.push(
                   context,
