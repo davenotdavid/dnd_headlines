@@ -8,7 +8,7 @@ import 'package:dnd_headlines/app/DndHeadlinesApp.dart';
 import 'package:dnd_headlines/model/HeadlineResponse.dart';
 import 'package:dnd_headlines/util/Constants.dart';
 import 'package:dnd_headlines/util/HelperFunctions.dart';
-import 'package:dnd_headlines/util/widget/DndEmptyStateViewWidget.dart';
+import 'package:dnd_headlines/util/widget/DndTextViewWidget.dart';
 import 'package:dnd_headlines/util/widget/DndProgressIndicatorWidget.dart';
 import 'package:dnd_headlines/res/Strings.dart';
 
@@ -43,7 +43,7 @@ class DndHeadlinesRootWidget extends StatelessWidget {
           if (snapshot.hasData) {
             return HeadlineWidget(headline: snapshot.data);
           } else if (snapshot.hasError) {
-            return DndEmptyStateViewWidget(emptyText: Strings.errorEmptyStateViewGetNewsSources,);
+            return DndTextViewWidget(text: Strings.errorEmptyStateViewGetNewsSources,);
           } else {
             return DndProgressIndicatorWidget();
           }

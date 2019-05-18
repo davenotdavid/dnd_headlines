@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:dnd_headlines/res/Strings.dart';
 
 /// Helper widget to include other material components 
-/// wrapping the empty state [Text].
-class DndEmptyStateViewWidget extends StatelessWidget {
+/// wrapping the [Text].
+class DndTextViewWidget extends StatelessWidget {
 
-  final String emptyText;
+  final String text;
 
-  DndEmptyStateViewWidget({@required this.emptyText});
+  DndTextViewWidget({@required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class DndEmptyStateViewWidget extends StatelessWidget {
         title: Text(Strings.appName)
       ),
       body: Center(
-        child: Text(emptyText)
+        child: Text(text)
       ),
     );
   }
