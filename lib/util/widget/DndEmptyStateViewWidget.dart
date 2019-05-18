@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'package:dnd_headlines/res/Strings.dart';
 
-/// Helper progress widget to include other material components 
-/// wrapping the [CircularProgressIndicator].
-class DndProgressIndicatorWidget extends StatelessWidget {
+/// Helper widget to include other material components 
+/// wrapping the empty state [Text].
+class DndEmptyStateViewWidget extends StatelessWidget {
+
+  final String emptyText;
+
+  DndEmptyStateViewWidget({@required this.emptyText});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +17,7 @@ class DndProgressIndicatorWidget extends StatelessWidget {
         title: Text(Strings.appName)
       ),
       body: Center(
-        child: CircularProgressIndicator()
+        child: Text(emptyText)
       ),
     );
   }

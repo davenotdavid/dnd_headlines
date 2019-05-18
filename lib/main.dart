@@ -8,6 +8,8 @@ import 'package:dnd_headlines/app/DndHeadlinesApp.dart';
 import 'package:dnd_headlines/model/HeadlineResponse.dart';
 import 'package:dnd_headlines/util/Constants.dart';
 import 'package:dnd_headlines/util/HelperFunctions.dart';
+import 'package:dnd_headlines/util/widget/DndEmptyStateViewWidget.dart';
+import 'package:dnd_headlines/util/widget/DndProgressIndicatorWidget.dart';
 import 'package:dnd_headlines/res/Strings.dart';
 
 import 'package:firebase_remote_config/firebase_remote_config.dart';
@@ -41,9 +43,8 @@ class DndHeadlinesRootWidget extends StatelessWidget {
           if (snapshot.hasData) {
             return HeadlineWidget(headline: snapshot.data);
           } else if (snapshot.hasError) {
-            return Center(child: Text(Strings.errorEmptyViewGetNewsSources));
+            return DndEmptyStateViewWidget(emptyText: Strings.errorEmptyStateViewGetNewsSources,);
           } else {
-            /// TODO: return Center(child: CircularProgressIndicator());
             return DndProgressIndicatorWidget();
           }
         }
@@ -62,28 +63,6 @@ class DndHeadlinesRootWidget extends StatelessWidget {
         .catchError((error) => DndHeadlinesApp.log(error));
 
     return getNewsSources(_newsApiKey, _sourceId);
-  }
-
-}
-
-/// TODO: Document
-class DndProgressIndicatorWidget extends StatefulWidget {
-
-  @override
-  _DndProgressIndicatorState createState() => _DndProgressIndicatorState();
-
-}
-
-class _DndProgressIndicatorState extends State<DndProgressIndicatorWidget> {
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(Strings.appName)
-      ),
-      body: Center(child: CircularProgressIndicator()),
-    );
   }
 
 }
@@ -155,7 +134,7 @@ class HeadlineWidget extends AnimatedWidget {
               }
             );
           })
-        : Center(child: Text(Strings.errorEmptyViewGetNewsSources)),
+        : Center(child: Text(Strings.errorEmptyStateViewGetNewsSources)),
       onRefresh: () async {
         await getNewsSources(_newsApiKey, _sourceId)
             .then((headline) => this.headline.setHeadline(headline))
