@@ -43,7 +43,8 @@ class DndHeadlinesRootWidget extends StatelessWidget {
           } else if (snapshot.hasError) {
             return Center(child: Text(Strings.errorEmptyViewGetNewsSources));
           } else {
-            return Center(child: CircularProgressIndicator());
+            /// TODO: return Center(child: CircularProgressIndicator());
+            return DndProgressIndicatorWidget();
           }
         }
       ),
@@ -61,6 +62,28 @@ class DndHeadlinesRootWidget extends StatelessWidget {
         .catchError((error) => DndHeadlinesApp.log(error));
 
     return getNewsSources(_newsApiKey, _sourceId);
+  }
+
+}
+
+/// TODO: Document
+class DndProgressIndicatorWidget extends StatefulWidget {
+
+  @override
+  _DndProgressIndicatorState createState() => _DndProgressIndicatorState();
+
+}
+
+class _DndProgressIndicatorState extends State<DndProgressIndicatorWidget> {
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(Strings.appName)
+      ),
+      body: Center(child: CircularProgressIndicator()),
+    );
   }
 
 }
