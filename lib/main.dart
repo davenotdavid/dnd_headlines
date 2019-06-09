@@ -8,6 +8,8 @@ import 'package:dnd_headlines/app/DndHeadlinesApp.dart';
 import 'package:dnd_headlines/model/HeadlineResponse.dart';
 import 'package:dnd_headlines/util/Constants.dart';
 import 'package:dnd_headlines/util/HelperFunctions.dart';
+import 'package:dnd_headlines/util/widget/DndTextViewWidget.dart';
+import 'package:dnd_headlines/util/widget/DndProgressIndicatorWidget.dart';
 import 'package:dnd_headlines/res/Strings.dart';
 
 import 'package:firebase_remote_config/firebase_remote_config.dart';
@@ -41,9 +43,9 @@ class DndHeadlinesRootWidget extends StatelessWidget {
           if (snapshot.hasData) {
             return HeadlineWidget(headline: snapshot.data);
           } else if (snapshot.hasError) {
-            return Center(child: Text(Strings.errorEmptyViewGetNewsSources));
+            return DndTextViewWidget(text: Strings.errorEmptyStateViewGetNewsSources,);
           } else {
-            return Center(child: CircularProgressIndicator());
+            return DndProgressIndicatorWidget();
           }
         }
       ),
@@ -132,7 +134,7 @@ class HeadlineWidget extends AnimatedWidget {
               }
             );
           })
-        : Center(child: Text(Strings.errorEmptyViewGetNewsSources)),
+        : Center(child: Text(Strings.errorEmptyStateViewGetNewsSources)),
       onRefresh: () async {
         await getNewsSources(_newsApiKey, _sourceId)
             .then((headline) => this.headline.setHeadline(headline))
