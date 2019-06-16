@@ -96,13 +96,7 @@ class HeadlineWidget extends AnimatedWidget {
           )
         ],
       ),
-      body: _getHeadlineListViewWidget(),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.refresh),
-        onPressed: () {
-          _onRefreshFabClicked();
-        }
-      ),
+      body: _getHeadlineListViewWidget()
     );
   }
 
@@ -168,14 +162,6 @@ class HeadlineWidget extends AnimatedWidget {
     _sourceId = newsSources[value[0]].id;
     await setNewsSourcePrefId(_sourceId);
 
-    await getNewsSources(_newsApiKey, _sourceId)
-        .then((headline) => this.headline.setHeadline(headline))
-        .catchError((error) => DndHeadlinesApp.log(error));
-  }
-
-  /// Handles making another GET call, and only rebuilds this widget
-  /// if there's a diff between the old and new returned data.
-  void _onRefreshFabClicked() async {
     await getNewsSources(_newsApiKey, _sourceId)
         .then((headline) => this.headline.setHeadline(headline))
         .catchError((error) => DndHeadlinesApp.log(error));
