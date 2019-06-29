@@ -101,16 +101,21 @@ class HeadlineWidget extends AnimatedWidget {
   }
 
   Widget _getHeadlineListViewWidget() {
+    /// Retrieves the articles from the [Headline] listenable object, and 
+    /// then filters out the articles that don't qualify with say, 
+    /// respective properties that are either null or blank for instance.
     final articles = headline.articles ?? [];
+    final filteredArticles = articles.where(((item) => (!(HelperFunctions.isNullOrBlank(item.title))))).toList();
 
     return RefreshIndicator(
-      child: articles.isNotEmpty
+      child: filteredArticles.isNotEmpty
         ? ListView.builder(
-          itemCount: articles.length,
+          itemCount: filteredArticles.length,
           physics: const AlwaysScrollableScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
-            final article = articles[index];
-
+            final article = filteredArticles[index];
+            DndHeadlinesApp.log('Article: $article');
+            
             return ListTile(
               title: Text(article.title),
               subtitle: Text(HelperFunctions.getTimeDifference(article.publishedAt)),
