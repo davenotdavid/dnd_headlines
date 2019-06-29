@@ -1,7 +1,7 @@
 import 'package:dnd_headlines/app/DndHeadlinesApp.dart';
 import 'package:dnd_headlines/model/HeadlineResponse.dart';
 
-/// Extension functions not supported yet as of Dart 2
+/// Disclaimer: Extension functions not supported yet as of Dart 2
 
 class HelperFunctions {
 
@@ -37,6 +37,13 @@ class HelperFunctions {
     }
 
     return '';
+  }
+
+  /// Attempt to make this non-extension function 'Kotlin-like'.
+  /// Also, note that the News API returns null values as a 
+  /// string.
+  static bool isNullOrBlank(String str) {
+    return str == null || str == 'null' || str.trim().isEmpty;
   }
 
 }
