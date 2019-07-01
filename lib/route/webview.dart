@@ -3,7 +3,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 import 'package:dnd_headlines/model/HeadlineResponse.dart';
 
-WebViewController _controller;
+//WebViewController _controller;
 class WebRoute extends StatelessWidget {
 
   final Article article;
@@ -18,9 +18,9 @@ class WebRoute extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(article.title)),
       body: WebView(
-        onWebViewCreated: (WebViewController controller) {
+        /* onWebViewCreated: (WebViewController controller) {
           _controller = controller;
-        },
+        }, */
         initialUrl: article.url,
         javascriptMode: JavascriptMode.unrestricted
       )
