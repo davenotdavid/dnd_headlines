@@ -1,4 +1,4 @@
-# DND Headlines
+# DND Headlines [![Build Status](https://app.bitrise.io/app/fc857c06d9e15704/status.svg?token=V1rAoQ3inC0Sm_DlS-N3uQ&branch=flutter)](https://app.bitrise.io/app/fc857c06d9e15704)
 
 A Flutter rewrite of the existing [DND Headlines Android app](https://play.google.com/store/apps/details?id=com.davenotdavid.dndheadlines).
 
