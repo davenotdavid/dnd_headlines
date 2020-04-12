@@ -125,7 +125,7 @@ class HeadlineWidget extends AnimatedWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => WebRoute(article: article)),
+                  MaterialPageRoute(builder: (context) => ArticleWebRoute(article: article)),
                 );
               }
             );
