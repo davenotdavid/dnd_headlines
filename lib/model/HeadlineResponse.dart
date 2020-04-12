@@ -39,11 +39,10 @@ import 'package:dnd_headlines/res/Strings.dart';
     }
  */
 
-/// Root response serialization model (for headline data
-/// from the News API package) that's a subclass of
-/// [ChangeNotifier] that listens for changes in headline
-/// data used in widgets, and then re-binds the widget tree
-/// if there's really a diff.
+/// Root response serialization model (for headline data from the News API 
+/// package) that's a subclass of [ChangeNotifier] that listens for changes 
+/// in headline data used in widgets, and then re-binds the widget tree if 
+/// there's really a diff.
 class Headline extends ChangeNotifier {
 
   String status;
@@ -66,8 +65,8 @@ class Headline extends ChangeNotifier {
         'articles': articles
       };
 
-  /// Helper function used to retrieve a news source publisher's
-  /// name (i.e. Google News).
+  /// Helper function used to retrieve a news source publisher's name (i.e.
+  /// Google News).
   String getPublisherName() {
     try {
       var article = articles.first;
@@ -80,9 +79,8 @@ class Headline extends ChangeNotifier {
     return null;
   }
 
-  /// Notifies all registered listeners only if there's a diff
-  /// between an existing [Headline] object and the following
-  /// object param.
+  /// Notifies all registered listeners only if there's a diff between an existing
+  /// [Headline] object and the following object param.
   void setHeadline(Headline headline) async {
     status = headline.status;
     totalResults = headline.totalResults;

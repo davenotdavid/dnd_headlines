@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:dnd_headlines/res/Strings.dart';
 
-/// Helper widget to include other material components 
-/// wrapping the [Text].
+/// Helper widget to include other material components wrapping the [Text].
 class DndTextViewWidget extends StatelessWidget {
 
   final String text;

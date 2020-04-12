@@ -23,11 +23,10 @@ String _sourceId;
 
 void main() => runApp(DndHeadlinesRootWidget());
 
-/// Root widget responsible for laying out the home screen
-/// of the app. Aside from theme and styling, a [FutureBuilder]
-/// is used to reactively build out the widget as soon as the
-/// latest [AsyncSnapshot]'s tasks are completed (with the
-/// [Future] returned.
+/// Root widget responsible for laying out the home screen of the app. Aside 
+/// from theme and styling, a [FutureBuilder] is used to reactively build out 
+/// the widget as soon as the latest [AsyncSnapshot]'s tasks are completed 
+/// (with the [Future] returned.
 class DndHeadlinesRootWidget extends StatelessWidget {
 
   @override
@@ -52,8 +51,8 @@ class DndHeadlinesRootWidget extends StatelessWidget {
     );
   }
 
-  /// Inits field instances used throughout this app prior to
-  /// retrieving headline data during the initial session.
+  /// Inits field instances used throughout this app prior to retrieving headline 
+  /// data during the initial session.
   Future<Headline> _initDataAndGetHeadlines() async {
     final remoteConfig = await getRemoteConfig();
     _newsApiKey = remoteConfig.getString(Strings.newsApiKey);
@@ -67,20 +66,18 @@ class DndHeadlinesRootWidget extends StatelessWidget {
 
 }
 
-/// A subclass of the "listenable" widget, [AnimatedWidget],
-/// that rebuilds itself every time there's a diff between
-/// [Headline] data. This is possible since [Headline]
-/// implements a listenable.
+/// A subclass of the "listenable" widget, [AnimatedWidget], that rebuilds 
+/// itself every time there's a diff between [Headline] data. This is 
+/// possible since [Headline] implements a listenable.
 class HeadlineWidget extends AnimatedWidget {
 
   final Headline headline;
 
   HeadlineWidget({this.headline}) : super(listenable: headline);
 
-  /// Lays out the top [Headline] news data via a [ListView]
-  /// should there be data, otherwise an empty view is shown.
-  /// A user can also change the news publisher (which will
-  /// fire off the listener), or maybe refresh the data.
+  /// Lays out the top [Headline] news data via a [ListView] should there be data,
+  /// otherwise an empty view is shown. A user can also change the news publisher 
+  /// (which will fire off the listener), or maybe refresh the data.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,9 +98,9 @@ class HeadlineWidget extends AnimatedWidget {
   }
 
   Widget _getHeadlineListViewWidget() {
-    /// Retrieves the articles from the [Headline] listenable object, and 
-    /// then filters out the articles that don't qualify with say, 
-    /// respective properties that are either null or blank for instance.
+    /// Retrieves the articles from the [Headline] listenable object, and then 
+    /// filters out the articles that don't qualify with say, respective properties 
+    /// that are either null or blank for instance.
     final articles = headline.articles ?? [];
     final filteredArticles = articles.where(((item) => (!(HelperFunctions.isNullOrBlank(item.title))))).toList();
 
@@ -142,8 +139,8 @@ class HeadlineWidget extends AnimatedWidget {
     );
   }
 
-  /// Displays a [Picker] dialog of a list of news publisher options
-  /// after decoding the news source JSON metadata.
+  /// Displays a [Picker] dialog of a list of news publisher options after 
+  /// decoding the news source JSON metadata.
   void _showPickerDialog(BuildContext context) async {
     final newsSources = List<Source>();
     await loadNewsSourcesJson(context)
@@ -160,9 +157,9 @@ class HeadlineWidget extends AnimatedWidget {
     ).showDialog(context);
   }
 
-  /// Handles the news publisher selected from the [Picker] such as
-  /// retrieving [Headline] data with the selected source's ID (and sets
-  /// and caches it), and then rebuilds this widget with new data.
+  /// Handles the news publisher selected from the [Picker] such as retrieving 
+  /// [Headline] data with the selected source's ID (and sets and caches it), and 
+  /// then rebuilds this widget with new data.
   void _onNewsSourceSelected(List<Source> newsSources, List value) async {
     _sourceId = newsSources[value[0]].id;
     await setNewsSourcePrefId(_sourceId);
@@ -176,8 +173,7 @@ class HeadlineWidget extends AnimatedWidget {
 
 /// TODO: The following helper functions are used universally, so move them somewhere more reasonable (i.e. API interface, service layer, and etc.)
 
-/// Returns a list of [Source]s after decoding the static JSON
-/// metadata file.
+/// Returns a list of [Source]s after decoding the static JSON metadata file.
 Future<List<Source>> loadNewsSourcesJson(BuildContext context) async {
   String data = await DefaultAssetBundle.of(context).loadString(Strings.newsSourceJsonPath);
   final jsonResult = json.decode(data);
@@ -201,13 +197,13 @@ Future<void> setNewsSourcePrefId(String sourceId) async {
 /// GET call for news source data.
 Future<Headline> getNewsSources(String apiKey, String sourceId) async {
   if (apiKey == null || apiKey.isEmpty) {
-    /// Ensures that the empty view will be set from the
-    /// calling widget via [Headline]'s listen notifier.
+    /// Ensures that the empty view will be set from the calling widget via 
+    /// [Headline]'s listen notifier.
     return Headline(null, null, List<Article>());
   }
 
-  /// JSON decoding occurs deep under the hood within the following
-  /// News API package implementation.
+  /// JSON decoding occurs deep under the hood within the following News API 
+  /// package implementation.
   final client = NewsapiClient(apiKey);
   final sourceList = [sourceId ?? Strings.newsSourcePrefIdDefault];
   final response = await client.request(TopHeadlines(
@@ -220,8 +216,7 @@ Future<Headline> getNewsSources(String apiKey, String sourceId) async {
   return headline;
 }
 
-/// Getter for Firebase [RemoteConfig] for the securely stored
-/// News API key.
+/// Getter for Firebase [RemoteConfig] for the securely stored News API key.
 Future<RemoteConfig> getRemoteConfig() async {
   final RemoteConfig remoteConfig = await RemoteConfig.instance;
 
