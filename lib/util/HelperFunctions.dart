@@ -30,7 +30,7 @@ class HelperFunctions {
       }
       final seconds = timeDifference.inSeconds;
       if (seconds > 0) {
-        return (seconds == 1) ? '$seconds second' : '$seconds seconds';
+        return (seconds == 1) ? '$seconds second ago' : '$seconds seconds ago';
       }
     } on FormatException {
       DndHeadlinesApp.log('Error formatting $otherTime');
