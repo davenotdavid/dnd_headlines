@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dnd_headlines/res/Dimens.dart';
+import 'package:dnd_headlines/route/articleWebview.dart';
 import 'package:dnd_headlines/route/webview.dart';
 import 'package:flutter/material.dart';
 
@@ -94,7 +95,14 @@ class HeadlineWidget extends AnimatedWidget {
         ],
       ),
       body: _getHeadlineListViewWidget(),
-      bottomNavigationBar: Image.asset(Strings.newsApiAttributionImgPath),
+      bottomNavigationBar: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => WebRoute(url: Strings.newsApiUrl)),
+          );
+        },
+        child: Image.asset(Strings.newsApiAttributionImgPath)),
     );
   }
 

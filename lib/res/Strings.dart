@@ -1,4 +1,3 @@
-/// String res version
 class Strings {
 
   // TODO: Investigate if obfuscating name conventions for build types/flavors can be done exclusively via Flutter or not
@@ -12,6 +11,7 @@ class Strings {
 
   static final String newsApiAttributionImgPath = 'assets/images/news_api_attribution_image.png';
   static final String newsApiKey = 'news_api_key';
+  static final String newsApiUrl = 'https://newsapi.org';
   static final String newsSourceJsonPath = 'assets/news_sources.json';
   static final String newsSourcePickerDialogTitle = 'Select News Source';
   static final String newsSourcePrefIdDefault = 'google-news';

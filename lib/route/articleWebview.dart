@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:dnd_headlines/res/Strings.dart';
 
+import 'package:dnd_headlines/model/HeadlineResponse.dart';
+
+/// Note that this webview won't be generic like the one from [WebRoute].
 //WebViewController _controller;
-class WebRoute extends StatelessWidget {
+class ArticleWebRoute extends StatelessWidget {
 
-  final String url;
+  final Article article;
 
-  WebRoute({@required this.url});
+  ArticleWebRoute({@required this.article});
 
   /// When returning a [Scaffold] here as part of this succeeding route, a 
   /// platform-specific back button is automatically added onto the app bar, 
@@ -15,12 +17,12 @@ class WebRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(Strings.appName)),
+      appBar: AppBar(title: Text(article.title)),
       body: WebView(
         /* onWebViewCreated: (WebViewController controller) {
           _controller = controller;
         }, */
-        initialUrl: url,
+        initialUrl: article.url,
         javascriptMode: JavascriptMode.unrestricted
       )
     );
