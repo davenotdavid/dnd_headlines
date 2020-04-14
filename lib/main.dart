@@ -93,7 +93,8 @@ class HeadlineWidget extends AnimatedWidget {
           )
         ],
       ),
-      body: _getHeadlineListViewWidget()
+      body: _getHeadlineListViewWidget(),
+      bottomNavigationBar: Image.asset(Strings.newsApiAttributionImgPath),
     );
   }
 

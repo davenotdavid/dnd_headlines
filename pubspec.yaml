@@ -93,3 +93,4 @@ flutter:
 
   assets:
     - assets/news_sources.json
+    - assets/images/news_api_attribution_image.png
