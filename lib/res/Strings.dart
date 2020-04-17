@@ -10,7 +10,7 @@ class Strings {
   static final String errorMsgHeadlinePublisherName = 'Error retrieving Headline object publisher\'s name.';
 
   static final String newsApiAttributionImgPath = 'assets/images/news_api_attribution_image.png';
-  static final String newsApiKey = 'news_api_key';
+  static final String newsApiKey = 'c6f9761272e94a7fb5bdc53820093348';
   static final String newsApiUrl = 'https://newsapi.org';
   static final String newsSourceJsonPath = 'assets/news_sources.json';
   static final String newsSourcePickerDialogTitle = 'Select News Source';

@@ -13,13 +13,11 @@ import 'package:dnd_headlines/util/widget/DndTextViewWidget.dart';
 import 'package:dnd_headlines/util/widget/DndProgressIndicatorWidget.dart';
 import 'package:dnd_headlines/res/Strings.dart';
 
-import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:newsapi_client/newsapi_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Class fields
-String _newsApiKey;
 String _sourceId;
 
 void main() => runApp(DndHeadlinesRootWidget());
@@ -55,14 +53,11 @@ class DndHeadlinesRootWidget extends StatelessWidget {
   /// Inits field instances used throughout this app prior to retrieving headline 
   /// data during the initial session.
   Future<Headline> _initDataAndGetHeadlines() async {
-    final remoteConfig = await getRemoteConfig();
-    _newsApiKey = remoteConfig.getString(Strings.newsApiKey);
-
     await getNewsSourcePrefId()
         .then((sourcePrefId) => _sourceId = sourcePrefId)
         .catchError((error) => DndHeadlinesApp.log(error));
 
-    return getNewsSources(_newsApiKey, _sourceId);
+    return getNewsSources(_sourceId);
   }
 
 }
@@ -141,7 +136,7 @@ class HeadlineWidget extends AnimatedWidget {
           })
         : Center(child: Text(Strings.errorEmptyStateViewGetNewsSources)),
       onRefresh: () async {
-        await getNewsSources(_newsApiKey, _sourceId)
+        await getNewsSources(_sourceId)
             .then((headline) => this.headline.setHeadline(headline))
             .catchError((error) => DndHeadlinesApp.log(error));
       }
@@ -173,7 +168,7 @@ class HeadlineWidget extends AnimatedWidget {
     _sourceId = newsSources[value[0]].id;
     await setNewsSourcePrefId(_sourceId);
 
-    await getNewsSources(_newsApiKey, _sourceId)
+    await getNewsSources(_sourceId)
         .then((headline) => this.headline.setHeadline(headline))
         .catchError((error) => DndHeadlinesApp.log(error));
   }
@@ -204,16 +199,10 @@ Future<void> setNewsSourcePrefId(String sourceId) async {
 }
 
 /// GET call for news source data.
-Future<Headline> getNewsSources(String apiKey, String sourceId) async {
-  if (apiKey == null || apiKey.isEmpty) {
-    /// Ensures that the empty view will be set from the calling widget via 
-    /// [Headline]'s listen notifier.
-    return Headline(null, null, List<Article>());
-  }
-
+Future<Headline> getNewsSources(String sourceId) async {
   /// JSON decoding occurs deep under the hood within the following News API 
   /// package implementation.
-  final client = NewsapiClient(apiKey);
+  final client = NewsapiClient(Strings.newsApiKey);
   final sourceList = [sourceId ?? Strings.newsSourcePrefIdDefault];
   final response = await client.request(TopHeadlines(
       sources: sourceList, /// Source ID as the identifier
@@ -223,27 +212,4 @@ Future<Headline> getNewsSources(String apiKey, String sourceId) async {
   headline.log();
 
   return headline;
-}
-
-/// Getter for Firebase [RemoteConfig] for the securely stored News API key.
-Future<RemoteConfig> getRemoteConfig() async {
-  final RemoteConfig remoteConfig = await RemoteConfig.instance;
-
-  /// Enables developer mode to relax fetch throttling.
-  remoteConfig.setConfigSettings(RemoteConfigSettings(debugMode: true));
-  remoteConfig.setDefaults(<String, dynamic>{
-    Strings.newsApiKey: "",
-  });
-
-  try {
-    /// Using default duration to force fetching from remote server.
-    await remoteConfig.fetch(expiration: const Duration(seconds: 0));
-    await remoteConfig.activateFetched();
-  } on FetchThrottledException catch (exception) {
-    print(exception);
-  } catch (exception) {
-    print(Strings.errorMsgExceptionRemoteConfig);
-  }
-
-  return remoteConfig;
 }
