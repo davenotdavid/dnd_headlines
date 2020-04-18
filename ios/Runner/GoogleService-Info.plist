@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>565402457024-qvscnllgrq3acrt64neqrf33i9it0ba2.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.565402457024-qvscnllgrq3acrt64neqrf33i9it0ba2</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>565402457024-6lg0bm0ls012444n2kofa6rn4mgho7k7.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDwGVuCuup25QOcHtc0ydQL2hX-LxEdtYc</string>
+	<key>GCM_SENDER_ID</key>
+	<string>565402457024</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.davenotdavid.dndHeadlines</string>
+	<key>PROJECT_ID</key>
+	<string>dnd-headlines</string>
+	<key>STORAGE_BUCKET</key>
+	<string>dnd-headlines.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:565402457024:ios:219c479a1865f211</string>
+	<key>DATABASE_URL</key>
+	<string>https://dnd-headlines.firebaseio.com</string>
+</dict>
+</plist>
