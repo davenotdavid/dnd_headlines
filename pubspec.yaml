@@ -24,6 +24,10 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
 
+  # Flutter plugin for Firebase Crashlytics. It reports uncaught errors to the 
+  # Firebase console.
+  firebase_crashlytics: ^0.1.3+3
+
   # Flutter plugin picker. Includes NumberPicker, DateTimePicker,
   # ArrayPicker, and default linkage Picker. Provides flexible parameters
   # to meet various needs.
