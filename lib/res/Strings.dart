@@ -12,7 +12,7 @@ class Strings {
   static final String newsApiKey = 'c6f9761272e94a7fb5bdc53820093348';
   static final String newsApiUrl = 'https://newsapi.org';
   static final String newsSourceJsonPath = 'assets/news_sources.json';
-  static final String newsSourcePickerDialogTitle = 'Select News Source';
+  static final String newsSourcePickerDialogTitle = 'Select Media';
   static final String newsSourcePrefIdDefault = 'google-news';
   static final String newsSourcePrefKey = 'news_source_pref_key';
 

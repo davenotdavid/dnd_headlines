@@ -81,7 +81,7 @@ class HeadlineWidget extends AnimatedWidget {
         title: Text(headline.getPublisherName() ?? Strings.appName),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.settings),
+            icon: Icon(Icons.collections_bookmark),
             alignment: Alignment.centerRight,
             onPressed: () {
               _showPickerDialog(context);
