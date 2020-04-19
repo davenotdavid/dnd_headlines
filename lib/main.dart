@@ -117,21 +117,23 @@ class HeadlineWidget extends AnimatedWidget {
             final article = filteredArticles[index];
             DndHeadlinesApp.log('Article: $article');
             
-            return ListTile(
-              title: Text(article.title),
-              subtitle: Text(HelperFunctions.getTimeDifference(article.publishedAt)),
-              contentPadding: EdgeInsets.fromLTRB(
-                  Dimens.paddingDefault,
-                  (index == 0) ? Dimens.paddingOneHalf : 0.0,
-                  Dimens.paddingDefault,
-                  Dimens.paddingOneHalf
+            return Card(
+              child: ListTile(
+                title: Text(article.title),
+                subtitle: Text(HelperFunctions.getTimeDifference(article.publishedAt)),
+                contentPadding: EdgeInsets.fromLTRB(
+                    Dimens.paddingDefault,
+                    (index == 0) ? Dimens.paddingOneHalf : 0.0,
+                    Dimens.paddingDefault,
+                    Dimens.paddingOneHalf
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ArticleWebRoute(article: article)),
+                  );
+                }
               ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ArticleWebRoute(article: article)),
-                );
-              }
             );
           })
         : Center(child: Text(Strings.errorEmptyStateViewGetNewsSources)),
