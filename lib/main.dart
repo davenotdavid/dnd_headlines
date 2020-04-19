@@ -13,6 +13,7 @@ import 'package:dnd_headlines/util/widget/DndTextViewWidget.dart';
 import 'package:dnd_headlines/util/widget/DndProgressIndicatorWidget.dart';
 import 'package:dnd_headlines/res/Strings.dart';
 
+// import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:newsapi_client/newsapi_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,7 +21,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// Class fields
 String _sourceId;
 
-void main() => runApp(DndHeadlinesRootWidget());
+void main() {
+  // Set `enableInDevMode` to true to see reports while in debug mode
+  // This is only to be used for confirming that reports are being
+  // submitted as expected. It is not intended to be used for everyday
+  // development.
+  // Crashlytics.instance.enableInDevMode = true;
+
+  // // Pass all uncaught errors from the framework to Crashlytics.
+  // FlutterError.onError = Crashlytics.instance.recordFlutterError;
+
+  runApp(DndHeadlinesRootWidget());
+}
 
 /// Root widget responsible for laying out the home screen of the app. Aside 
 /// from theme and styling, a [FutureBuilder] is used to reactively build out 
