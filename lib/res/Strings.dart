@@ -2,8 +2,6 @@ class Strings {
 
   static final String appName = 'DND Headlines';
 
-  static final String appBarTitleSettings = 'Settings';
-
   static final String errorEmptyStateViewGetNewsSources = 'Error retrieving headlines. Please try again later.';
   static final String errorMsgExceptionRemoteConfig = 'Unable to fetch remote config. Cached or default values will be used.';
   static final String errorMsgHeadlinePublisherName = 'Error retrieving Headline object publisher\'s name.';

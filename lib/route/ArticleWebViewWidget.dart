@@ -5,11 +5,11 @@ import 'package:dnd_headlines/model/HeadlineResponse.dart';
 
 /// Note that this webview won't be generic like the one from [WebRoute].
 //WebViewController _controller;
-class ArticleWebRoute extends StatelessWidget {
+class ArticleWebViewWidget extends StatelessWidget {
 
   final Article article;
 
-  ArticleWebRoute({@required this.article});
+  ArticleWebViewWidget({@required this.article});
 
   /// When returning a [Scaffold] here as part of this succeeding route, a 
   /// platform-specific back button is automatically added onto the app bar, 

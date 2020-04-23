@@ -3,11 +3,11 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:dnd_headlines/res/Strings.dart';
 
 //WebViewController _controller;
-class WebRoute extends StatelessWidget {
+class WebViewWidget extends StatelessWidget {
 
   final String url;
 
-  WebRoute({@required this.url});
+  WebViewWidget({@required this.url});
 
   /// When returning a [Scaffold] here as part of this succeeding route, a 
   /// platform-specific back button is automatically added onto the app bar, 

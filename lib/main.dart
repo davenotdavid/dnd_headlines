@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:dnd_headlines/res/Dimens.dart';
-import 'package:dnd_headlines/route/articleWebview.dart';
-import 'package:dnd_headlines/route/webview.dart';
+import 'package:dnd_headlines/route/ArticleWebViewWidget.dart';
+import 'package:dnd_headlines/route/WebViewWidget.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dnd_headlines/app/DndHeadlinesApp.dart';
@@ -94,7 +94,7 @@ class HeadlineWidget extends AnimatedWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => WebRoute(url: Strings.newsApiUrl)),
+            MaterialPageRoute(builder: (context) => WebViewWidget(url: Strings.newsApiUrl)),
           );
         },
         child: Image.asset(Strings.newsApiAttributionImgPath)),
@@ -130,7 +130,7 @@ class HeadlineWidget extends AnimatedWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ArticleWebRoute(article: article)),
+                    MaterialPageRoute(builder: (context) => ArticleWebViewWidget(article: article)),
                   );
                 }
               ),
