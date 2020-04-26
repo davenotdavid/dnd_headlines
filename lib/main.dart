@@ -1,8 +1,6 @@
 import 'dart:convert';
 
 import 'package:dnd_headlines/res/Dimens.dart';
-import 'package:dnd_headlines/route/ArticleWebViewWidget.dart';
-import 'package:dnd_headlines/route/WebViewWidget.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dnd_headlines/app/DndHeadlinesApp.dart';
@@ -14,6 +12,7 @@ import 'package:dnd_headlines/util/widget/DndProgressIndicatorWidget.dart';
 import 'package:dnd_headlines/res/Strings.dart';
 
 import 'package:flutter_picker/flutter_picker.dart';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:newsapi_client/newsapi_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -94,7 +93,11 @@ class HeadlineWidget extends AnimatedWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => WebViewWidget(url: Strings.newsApiUrl)),
+            MaterialPageRoute(builder: (context) => WebviewScaffold(
+                url: Strings.newsApiUrl,
+                appBar: AppBar(title: Text(Strings.appName))
+              )
+            ),
           );
         },
         child: Image.asset(Strings.newsApiAttributionImgPath)),
@@ -130,7 +133,14 @@ class HeadlineWidget extends AnimatedWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ArticleWebViewWidget(article: article)),
+                    MaterialPageRoute(builder: (context) => 
+                      WebviewScaffold(
+                        url: article.url,
+                        appBar: AppBar(title: Text(article.title)),
+                        clearCache: true,
+                        appCacheEnabled: false,
+                      )
+                    )
                   );
                 }
               ),
