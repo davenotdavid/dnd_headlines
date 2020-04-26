@@ -24,20 +24,12 @@
     "name": "Bleacher Report"
   },
   {
-    "id": "bloomberg",
-    "name": "Bloomberg"
-  },
-  {
     "id": "breitbart-news",
     "name": "Breitbart News"
   },
   {
     "id": "business-insider",
     "name": "Business Insider"
-  },
-  {
-    "id": "buzzfeed",
-    "name": "Buzzfeed"
   },
   {
     "id": "cbs-news",
@@ -56,10 +48,6 @@
     "name": "Crypto Coins News"
   },
   {
-    "id": "daily-mail",
-    "name": "Daily Mail"
-  },
-  {
     "id": "engadget",
     "name": "Engadget"
   },
@@ -72,16 +60,8 @@
     "name": "ESPN"
   },
   {
-    "id": "financial-times",
-    "name": "Financial Times"
-  },
-  {
     "id": "fortune",
     "name": "Fortune"
-  },
-  {
-    "id": "four-four-two",
-    "name": "FourFourTwo"
   },
   {
     "id": "fox-news",
@@ -110,14 +90,6 @@
   {
     "id": "mtv-news",
     "name": "MTV News"
-  },
-  {
-    "id": "national-geographic",
-    "name": "National Geographic"
-  },
-  {
-    "id": "national-review",
-    "name": "National Review"
   },
   {
     "id": "nbc-news",
@@ -184,10 +156,6 @@
     "name": "The Verge"
   },
   {
-    "id": "the-wall-street-journal",
-    "name": "The Wall Street Journal"
-  },
-  {
     "id": "the-washington-post",
     "name": "The Washington Post"
   },
@@ -206,9 +174,5 @@
   {
     "id": "vice-news",
     "name": "Vice News"
-  },
-  {
-    "id": "wired",
-    "name": "Wired"
   }
 ]
