@@ -1,5 +1,8 @@
 [
-
+  {
+    "id": "abc-news",
+    "name": "ABC News"
+  },
   {
     "id": "ars-technica",
     "name": "Ars Technica"
@@ -9,12 +12,16 @@
     "name": "Associated Press"
   },
   {
+    "id": "axios",
+    "name": "Axios"
+  },
+  {
     "id": "bbc-news",
     "name": "BBC News"
   },
   {
-    "id": "bloomberg",
-    "name": "Bloomberg"
+    "id": "bleacher-report",
+    "name": "Bleacher Report"
   },
   {
     "id": "breitbart-news",
@@ -25,8 +32,20 @@
     "name": "Business Insider"
   },
   {
-    "id": "daily-mail",
-    "name": "Daily Mail"
+    "id": "cbs-news",
+    "name": "CBS News"
+  },
+  {
+    "id": "cnbc",
+    "name": "CNBC"
+  },
+  {
+    "id": "cnn",
+    "name": "CNN"
+  },
+  {
+    "id": "crypto-coins-news",
+    "name": "Crypto Coins News"
   },
   {
     "id": "engadget",
@@ -37,16 +56,12 @@
     "name": "Entertainment Weekly"
   },
   {
-    "id": "financial-times",
-    "name": "Financial Times"
+    "id": "espn",
+    "name": "ESPN"
   },
   {
     "id": "fortune",
     "name": "Fortune"
-  },
-  {
-    "id": "four-four-two",
-    "name": "FourFourTwo"
   },
   {
     "id": "fox-news",
@@ -61,32 +76,56 @@
     "name": "Google News (default)"
   },
   {
+    "id": "hacker-news",
+    "name": "Hacker News"
+  },
+  {
     "id": "ign",
     "name": "IGN"
   },
   {
-    "id": "mashable",
-    "name": "Mashable"
-  },
-  {
-    "id": "metro",
-    "name": "Metro"
+    "id": "medical-news-today",
+    "name": "Medical News Today"
   },
   {
     "id": "mtv-news",
     "name": "MTV News"
   },
   {
-    "id": "national-geographic",
-    "name": "National Geographic"
+    "id": "nbc-news",
+    "name": "NBC News"
   },
   {
-    "id": "new-york-magazine",
-    "name": "New York Magazine"
+    "id": "new-scientist",
+    "name": "New Scientist"
+  },
+  {
+    "id": "newsweek",
+    "name": "Newsweek"
+  },
+  {
+    "id": "next-big-future",
+    "name": "Next Big Future"
   },
   {
     "id": "nfl-news",
     "name": "NFL News"
+  },
+  {
+    "id": "nhl-news",
+    "name": "NHL News"
+  },
+  {
+    "id": "polygon",
+    "name": "Polygon"
+  },
+  {
+    "id": "recode",
+    "name": "Recode"
+  },
+  {
+    "id": "reddit-r-all",
+    "name": "Reddit /r/all"
   },
   {
     "id": "reuters",
@@ -101,20 +140,39 @@
     "name": "TechCrunch"
   },
   {
-    "id": "techradar",
-    "name": "TechRadar"
+    "id": "the-hill",
+    "name": "The Hill"
   },
   {
-    "id": "the-guardian-uk",
-    "name": "The Guardian (UK)"
+    "id": "the-huffington-post",
+    "name": "The Huffington Post"
   },
   {
-    "id": "the-new-york-times",
-    "name": "The New York Times"
+    "id": "the-next-web",
+    "name": "The Next Web"
   },
   {
-    "id": "the-wall-street-journal",
-    "name": "The Wall Street Journal"
+    "id": "the-verge",
+    "name": "The Verge"
+  },
+  {
+    "id": "the-washington-post",
+    "name": "The Washington Post"
+  },
+  {
+    "id": "the-washington-times",
+    "name": "The Washington Times"
+  },
+  {
+    "id": "time",
+    "name": "Time"
+  },
+  {
+    "id": "usa-today",
+    "name": "USA Today"
+  },
+  {
+    "id": "vice-news",
+    "name": "Vice News"
   }
-
 ]

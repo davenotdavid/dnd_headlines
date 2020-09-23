@@ -30,7 +30,7 @@ class HelperFunctions {
       }
       final seconds = timeDifference.inSeconds;
       if (seconds > 0) {
-        return (seconds == 1) ? '$seconds second' : '$seconds seconds';
+        return (seconds == 1) ? '$seconds second ago' : '$seconds seconds ago';
       }
     } on FormatException {
       DndHeadlinesApp.log('Error formatting $otherTime');
@@ -39,9 +39,8 @@ class HelperFunctions {
     return '';
   }
 
-  /// Attempt to make this non-extension function 'Kotlin-like'.
-  /// Also, note that the News API returns null values as a 
-  /// string.
+  /// Attempt to make this non-extension function 'Kotlin-like'. Also, note that 
+  /// the News API returns null values as a string like "null".
   static bool isNullOrBlank(String str) {
     return str == null || str == 'null' || str.trim().isEmpty;
   }

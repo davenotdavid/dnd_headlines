@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:dnd_headlines/res/Dimens.dart';
-import 'package:dnd_headlines/route/webview.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dnd_headlines/app/DndHeadlinesApp.dart';
@@ -14,20 +13,20 @@ import 'package:dnd_headlines/res/Strings.dart';
 
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter_picker/flutter_picker.dart';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:newsapi_client/newsapi_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// Class fields
+/// Fields used throughout this file.
 String _newsApiKey;
 String _sourceId;
 
 void main() => runApp(DndHeadlinesRootWidget());
 
-/// Root widget responsible for laying out the home screen
-/// of the app. Aside from theme and styling, a [FutureBuilder]
-/// is used to reactively build out the widget as soon as the
-/// latest [AsyncSnapshot]'s tasks are completed (with the
-/// [Future] returned.
+/// Root widget responsible for laying out the home screen of the app. Aside 
+/// from theme and styling, a [FutureBuilder] is used to reactively build out 
+/// the widget as soon as the latest [AsyncSnapshot]'s tasks are completed 
+/// (with the [Future] returned.
 class DndHeadlinesRootWidget extends StatelessWidget {
 
   @override
@@ -52,10 +51,10 @@ class DndHeadlinesRootWidget extends StatelessWidget {
     );
   }
 
-  /// Inits field instances used throughout this app prior to
-  /// retrieving headline data during the initial session.
+  /// Inits field instances used throughout this app prior to retrieving headline 
+  /// data during the initial session.
   Future<Headline> _initDataAndGetHeadlines() async {
-    final remoteConfig = await getRemoteConfig();
+    final remoteConfig = await getRemoteConfig();	
     _newsApiKey = remoteConfig.getString(Strings.newsApiKey);
 
     await getNewsSourcePrefId()
@@ -67,20 +66,18 @@ class DndHeadlinesRootWidget extends StatelessWidget {
 
 }
 
-/// A subclass of the "listenable" widget, [AnimatedWidget],
-/// that rebuilds itself every time there's a diff between
-/// [Headline] data. This is possible since [Headline]
-/// implements a listenable.
+/// A subclass of the "listenable" widget, [AnimatedWidget], that rebuilds 
+/// itself every time there's a diff between [Headline] data. This is 
+/// possible since [Headline] implements a listenable.
 class HeadlineWidget extends AnimatedWidget {
 
   final Headline headline;
 
   HeadlineWidget({this.headline}) : super(listenable: headline);
 
-  /// Lays out the top [Headline] news data via a [ListView]
-  /// should there be data, otherwise an empty view is shown.
-  /// A user can also change the news publisher (which will
-  /// fire off the listener), or maybe refresh the data.
+  /// Lays out the top [Headline] news data via a [ListView] should there be data,
+  /// otherwise an empty view is shown. A user can also change the news publisher 
+  /// (which will fire off the listener), or maybe refresh the data.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,7 +85,7 @@ class HeadlineWidget extends AnimatedWidget {
         title: Text(headline.getPublisherName() ?? Strings.appName),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.settings),
+            icon: Icon(Icons.collections_bookmark),
             alignment: Alignment.centerRight,
             onPressed: () {
               _showPickerDialog(context);
@@ -96,14 +93,26 @@ class HeadlineWidget extends AnimatedWidget {
           )
         ],
       ),
-      body: _getHeadlineListViewWidget()
+      body: _getHeadlineListViewWidget(),
+      bottomNavigationBar: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => WebviewScaffold(
+                url: Strings.newsApiUrl,
+                appBar: AppBar(title: Text(Strings.appName))
+              )
+            ),
+          );
+        },
+        child: Image.asset(Strings.newsApiAttributionImgPath)),
     );
   }
 
   Widget _getHeadlineListViewWidget() {
-    /// Retrieves the articles from the [Headline] listenable object, and 
-    /// then filters out the articles that don't qualify with say, 
-    /// respective properties that are either null or blank for instance.
+    /// Retrieves the articles from the [Headline] listenable object, and then 
+    /// filters out the articles that don't qualify with say, respective properties 
+    /// that are either null or blank for instance.
     final articles = headline.articles ?? [];
     final filteredArticles = articles.where(((item) => (!(HelperFunctions.isNullOrBlank(item.title))))).toList();
 
@@ -116,21 +125,30 @@ class HeadlineWidget extends AnimatedWidget {
             final article = filteredArticles[index];
             DndHeadlinesApp.log('Article: $article');
             
-            return ListTile(
-              title: Text(article.title),
-              subtitle: Text(HelperFunctions.getTimeDifference(article.publishedAt)),
-              contentPadding: EdgeInsets.fromLTRB(
-                  Dimens.paddingDefault,
-                  (index == 0) ? Dimens.paddingOneHalf : 0.0,
-                  Dimens.paddingDefault,
-                  Dimens.paddingOneHalf
+            return Card(
+              child: ListTile(
+                title: Text(article.title),
+                subtitle: Text(HelperFunctions.getTimeDifference(article.publishedAt)),
+                contentPadding: EdgeInsets.fromLTRB(
+                    Dimens.paddingDefault,
+                    (index == 0) ? Dimens.paddingOneHalf : 0.0,
+                    Dimens.paddingDefault,
+                    Dimens.paddingOneHalf
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => 
+                      WebviewScaffold(
+                        url: article.url,
+                        appBar: AppBar(title: Text(article.title)),
+                        clearCache: true,
+                        appCacheEnabled: false,
+                      )
+                    )
+                  );
+                }
               ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => WebRoute(article: article)),
-                );
-              }
             );
           })
         : Center(child: Text(Strings.errorEmptyStateViewGetNewsSources)),
@@ -142,8 +160,8 @@ class HeadlineWidget extends AnimatedWidget {
     );
   }
 
-  /// Displays a [Picker] dialog of a list of news publisher options
-  /// after decoding the news source JSON metadata.
+  /// Displays a [Picker] dialog of a list of news publisher options after 
+  /// decoding the news source JSON metadata.
   void _showPickerDialog(BuildContext context) async {
     final newsSources = List<Source>();
     await loadNewsSourcesJson(context)
@@ -160,9 +178,9 @@ class HeadlineWidget extends AnimatedWidget {
     ).showDialog(context);
   }
 
-  /// Handles the news publisher selected from the [Picker] such as
-  /// retrieving [Headline] data with the selected source's ID (and sets
-  /// and caches it), and then rebuilds this widget with new data.
+  /// Handles the news publisher selected from the [Picker] such as retrieving 
+  /// [Headline] data with the selected source's ID (and sets and caches it), and 
+  /// then rebuilds this widget with new data.
   void _onNewsSourceSelected(List<Source> newsSources, List value) async {
     _sourceId = newsSources[value[0]].id;
     await setNewsSourcePrefId(_sourceId);
@@ -176,8 +194,7 @@ class HeadlineWidget extends AnimatedWidget {
 
 /// TODO: The following helper functions are used universally, so move them somewhere more reasonable (i.e. API interface, service layer, and etc.)
 
-/// Returns a list of [Source]s after decoding the static JSON
-/// metadata file.
+/// Returns a list of [Source]s after decoding the static JSON metadata file.
 Future<List<Source>> loadNewsSourcesJson(BuildContext context) async {
   String data = await DefaultAssetBundle.of(context).loadString(Strings.newsSourceJsonPath);
   final jsonResult = json.decode(data);
@@ -200,14 +217,8 @@ Future<void> setNewsSourcePrefId(String sourceId) async {
 
 /// GET call for news source data.
 Future<Headline> getNewsSources(String apiKey, String sourceId) async {
-  if (apiKey == null || apiKey.isEmpty) {
-    /// Ensures that the empty view will be set from the
-    /// calling widget via [Headline]'s listen notifier.
-    return Headline(null, null, List<Article>());
-  }
-
-  /// JSON decoding occurs deep under the hood within the following
-  /// News API package implementation.
+  /// JSON decoding occurs deep under the hood within the following News API 
+  /// package implementation.
   final client = NewsapiClient(apiKey);
   final sourceList = [sourceId ?? Strings.newsSourcePrefIdDefault];
   final response = await client.request(TopHeadlines(
@@ -220,26 +231,24 @@ Future<Headline> getNewsSources(String apiKey, String sourceId) async {
   return headline;
 }
 
-/// Getter for Firebase [RemoteConfig] for the securely stored
-/// News API key.
-Future<RemoteConfig> getRemoteConfig() async {
-  final RemoteConfig remoteConfig = await RemoteConfig.instance;
+Future<RemoteConfig> getRemoteConfig() async {	
+  final RemoteConfig remoteConfig = await RemoteConfig.instance;	
 
-  /// Enables developer mode to relax fetch throttling.
-  remoteConfig.setConfigSettings(RemoteConfigSettings(debugMode: true));
-  remoteConfig.setDefaults(<String, dynamic>{
-    Strings.newsApiKey: "",
-  });
+  /// Enables developer mode to relax fetch throttling.	
+  remoteConfig.setConfigSettings(RemoteConfigSettings(debugMode: true));	
+  remoteConfig.setDefaults(<String, dynamic>{	
+    Strings.newsApiKey: "",	
+  });	
 
-  try {
-    /// Using default duration to force fetching from remote server.
-    await remoteConfig.fetch(expiration: const Duration(seconds: 0));
-    await remoteConfig.activateFetched();
-  } on FetchThrottledException catch (exception) {
-    print(exception);
-  } catch (exception) {
-    print(Strings.errorMsgExceptionRemoteConfig);
-  }
+  try {	
+    /// Using default duration to force fetching from remote server.	
+    await remoteConfig.fetch(expiration: const Duration(seconds: 0));	
+    await remoteConfig.activateFetched();	
+  } on FetchThrottledException catch (exception) {	
+    print(exception);	
+  } catch (exception) {	
+    print(Strings.errorMsgExceptionRemoteConfig);	
+  }	
 
-  return remoteConfig;
+  return remoteConfig;	
 }
