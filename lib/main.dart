@@ -1,33 +1,12 @@
-import 'dart:convert';
-
-import 'package:dnd_headlines/res/Dimens.dart';
 import 'package:flutter/material.dart';
+import 'package:dnd_headlines/utils/Strings.dart';
 
-import 'package:dnd_headlines/app/DndHeadlinesApp.dart';
-import 'package:dnd_headlines/model/HeadlineResponse.dart';
-import 'package:dnd_headlines/util/Constants.dart';
-import 'package:dnd_headlines/util/HelperFunctions.dart';
-import 'package:dnd_headlines/util/widget/DndTextViewWidget.dart';
-import 'package:dnd_headlines/util/widget/DndProgressIndicatorWidget.dart';
-import 'package:dnd_headlines/res/Strings.dart';
+/// TODO: Replace with News API key
+final String _newsApiKey = '[INSERT API KEY HERE]';
 
-import 'package:firebase_remote_config/firebase_remote_config.dart';
-import 'package:flutter_picker/flutter_picker.dart';
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
-import 'package:newsapi_client/newsapi_client.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+void main() => runApp(DndHeadlinesMainWidget());
 
-/// Fields used throughout this file.
-String _newsApiKey;
-String _sourceId;
-
-void main() => runApp(DndHeadlinesRootWidget());
-
-/// Root widget responsible for laying out the home screen of the app. Aside 
-/// from theme and styling, a [FutureBuilder] is used to reactively build out 
-/// the widget as soon as the latest [AsyncSnapshot]'s tasks are completed 
-/// (with the [Future] returned.
-class DndHeadlinesRootWidget extends StatelessWidget {
+class DndHeadlinesMainWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
@@ -36,219 +15,40 @@ class DndHeadlinesRootWidget extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blueGrey,
       ),
-      home: FutureBuilder<Headline>(
-        future: _initDataAndGetHeadlines(),
-        builder: (BuildContext context, AsyncSnapshot<Headline> snapshot) {
-          if (snapshot.hasData) {
-            return HeadlineWidget(headline: snapshot.data);
-          } else if (snapshot.hasError) {
-            return DndTextViewWidget(text: Strings.errorEmptyStateViewGetNewsSources,);
-          } else {
-            return DndProgressIndicatorWidget();
-          }
-        }
+      /// TODO: Add a `FutureBuilder` widget here for initiating async ops for data
+      /// TODO: Set up logic for computed data from newly created `FutureBuilder` to render respective widgets (i.e. data, empty state, and progress bar)
+      home: Container(
+        child: Text('Hello World! Let\'s get started!'),
       ),
     );
   }
 
-  /// Inits field instances used throughout this app prior to retrieving headline 
-  /// data during the initial session.
-  Future<Headline> _initDataAndGetHeadlines() async {
-    final remoteConfig = await getRemoteConfig();	
-    _newsApiKey = remoteConfig.getString(Strings.newsApiKey);
-
-    await getNewsSourcePrefId()
-        .then((sourcePrefId) => _sourceId = sourcePrefId)
-        .catchError((error) => DndHeadlinesApp.log(error));
-
-    return getNewsSources(_newsApiKey, _sourceId);
-  }
+  /// TODO: Create a getter function for data to pass in as the async computation param in the `FutureBuilder` above
 
 }
 
-/// A subclass of the "listenable" widget, [AnimatedWidget], that rebuilds 
-/// itself every time there's a diff between [Headline] data. This is 
-/// possible since [Headline] implements a listenable.
-class HeadlineWidget extends AnimatedWidget {
 
-  final Headline headline;
 
-  HeadlineWidget({this.headline}) : super(listenable: headline);
 
-  /// Lays out the top [Headline] news data via a [ListView] should there be data,
-  /// otherwise an empty view is shown. A user can also change the news publisher 
-  /// (which will fire off the listener), or maybe refresh the data.
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(headline.getPublisherName() ?? Strings.appName),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.collections_bookmark),
-            alignment: Alignment.centerRight,
-            onPressed: () {
-              _showPickerDialog(context);
-            },
-          )
-        ],
-      ),
-      body: _getHeadlineListViewWidget(),
-      bottomNavigationBar: GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => WebviewScaffold(
-                url: Strings.newsApiUrl,
-                appBar: AppBar(title: Text(Strings.appName))
-              )
-            ),
-          );
-        },
-        child: Image.asset(Strings.newsApiAttributionImgPath)),
-    );
-  }
+/// TODO: Add stateful widget that reactively rebuilds itself each time data changes
+/// TODO: Place headline article data in list view widget as part of Scaffold body param
+/// TODO: Handle tap logic to transition to webview (plugin) for article to open
+/// TODO: Wrap list view widget (and empty state text) in `RefreshIndicator` widget with refresh logic
+/// TODO: Create a helper function for time difference logic as subtitle text for each article list card
+/// TODO: Create a helper function for filtering article data with say, a null or blank title
+/// TODO: As part of Scaffold widget, add an app bar with a title and an action to handle a new source selection via `flutter_picker` plugin
+/// TODO: With the picker dialog, handle logic for when a different new source is selected and then cache it
+/// TODO: Use `GestureDetector` widget for News API attribution image at the bottom
 
-  Widget _getHeadlineListViewWidget() {
-    /// Retrieves the articles from the [Headline] listenable object, and then 
-    /// filters out the articles that don't qualify with say, respective properties 
-    /// that are either null or blank for instance.
-    final articles = headline.articles ?? [];
-    final filteredArticles = articles.where(((item) => (!(HelperFunctions.isNullOrBlank(item.title))))).toList();
 
-    return RefreshIndicator(
-      child: filteredArticles.isNotEmpty
-        ? ListView.builder(
-          itemCount: filteredArticles.length,
-          physics: const AlwaysScrollableScrollPhysics(),
-          itemBuilder: (BuildContext context, int index) {
-            final article = filteredArticles[index];
-            DndHeadlinesApp.log('Article: $article');
-            
-            return Card(
-              child: ListTile(
-                title: Text(article.title),
-                subtitle: Text(HelperFunctions.getTimeDifference(article.publishedAt)),
-                contentPadding: EdgeInsets.fromLTRB(
-                    Dimens.paddingDefault,
-                    (index == 0) ? Dimens.paddingOneHalf : 0.0,
-                    Dimens.paddingDefault,
-                    Dimens.paddingOneHalf
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => 
-                      WebviewScaffold(
-                        url: article.url,
-                        appBar: AppBar(title: Text(article.title)),
-                        clearCache: true,
-                        appCacheEnabled: false,
-                      )
-                    )
-                  );
-                }
-              ),
-            );
-          })
-        : Center(child: Text(Strings.errorEmptyStateViewGetNewsSources)),
-      onRefresh: () async {
-        await getNewsSources(_newsApiKey, _sourceId)
-            .then((headline) => this.headline.setHeadline(headline))
-            .catchError((error) => DndHeadlinesApp.log(error));
-      }
-    );
-  }
 
-  /// Displays a [Picker] dialog of a list of news publisher options after 
-  /// decoding the news source JSON metadata.
-  void _showPickerDialog(BuildContext context) async {
-    final newsSources = List<Source>();
-    await loadNewsSourcesJson(context)
-        .then((sources) => newsSources.addAll(sources))
-        .catchError((error) => DndHeadlinesApp.log(error));
 
-    new Picker(
-      adapter: PickerDataAdapter<String>(pickerdata: HelperFunctions.getSourceNames(newsSources)),
-      hideHeader: true,
-      title: new Text(Strings.newsSourcePickerDialogTitle),
-      onConfirm: (Picker picker, List value) {
-        _onNewsSourceSelected(newsSources, value);
-      }
-    ).showDialog(context);
-  }
+/// TODO: Add a helper function to decode static JSON metadata file for a list of news sources returned
 
-  /// Handles the news publisher selected from the [Picker] such as retrieving 
-  /// [Headline] data with the selected source's ID (and sets and caches it), and 
-  /// then rebuilds this widget with new data.
-  void _onNewsSourceSelected(List<Source> newsSources, List value) async {
-    _sourceId = newsSources[value[0]].id;
-    await setNewsSourcePrefId(_sourceId);
+/// TODO: Add helper functions for handling caching logic for a selected news source
 
-    await getNewsSources(_newsApiKey, _sourceId)
-        .then((headline) => this.headline.setHeadline(headline))
-        .catchError((error) => DndHeadlinesApp.log(error));
-  }
+/// TODO: Add helper, getter function for news source data
 
-}
 
-/// TODO: The following helper functions are used universally, so move them somewhere more reasonable (i.e. API interface, service layer, and etc.)
 
-/// Returns a list of [Source]s after decoding the static JSON metadata file.
-Future<List<Source>> loadNewsSourcesJson(BuildContext context) async {
-  String data = await DefaultAssetBundle.of(context).loadString(Strings.newsSourceJsonPath);
-  final jsonResult = json.decode(data);
-  final newsSources = (jsonResult as List).map((i) => Source.fromJson(i)).toList();
 
-  return newsSources;
-}
-
-/// Returns the cached news source publisher ID.
-Future<String> getNewsSourcePrefId() async {
-  final prefs = await SharedPreferences.getInstance();
-  return prefs.getString(Strings.newsSourcePrefKey) ?? Strings.newsSourcePrefIdDefault;
-}
-
-/// Caches the news source publisher ID for future sessions.
-Future<void> setNewsSourcePrefId(String sourceId) async {
-  final prefs = await SharedPreferences.getInstance();
-  prefs.setString(Strings.newsSourcePrefKey, sourceId);
-}
-
-/// GET call for news source data.
-Future<Headline> getNewsSources(String apiKey, String sourceId) async {
-  /// JSON decoding occurs deep under the hood within the following News API 
-  /// package implementation.
-  final client = NewsapiClient(apiKey);
-  final sourceList = [sourceId ?? Strings.newsSourcePrefIdDefault];
-  final response = await client.request(TopHeadlines(
-      sources: sourceList, /// Source ID as the identifier
-      pageSize: Constants.defaultPageSize
-  ));
-  final headline = Headline.fromJson(response);
-  headline.log();
-
-  return headline;
-}
-
-Future<RemoteConfig> getRemoteConfig() async {	
-  final RemoteConfig remoteConfig = await RemoteConfig.instance;	
-
-  /// Enables developer mode to relax fetch throttling.	
-  remoteConfig.setConfigSettings(RemoteConfigSettings(debugMode: true));	
-  remoteConfig.setDefaults(<String, dynamic>{	
-    Strings.newsApiKey: "",	
-  });	
-
-  try {	
-    /// Using default duration to force fetching from remote server.	
-    await remoteConfig.fetch(expiration: const Duration(seconds: 0));	
-    await remoteConfig.activateFetched();	
-  } on FetchThrottledException catch (exception) {	
-    print(exception);	
-  } catch (exception) {	
-    print(Strings.errorMsgExceptionRemoteConfig);	
-  }	
-
-  return remoteConfig;	
-}

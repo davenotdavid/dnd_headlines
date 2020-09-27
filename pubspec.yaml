@@ -24,30 +24,13 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
 
-  # Flutter plugin for Firebase Crashlytics. It reports uncaught errors to the 
-  # Firebase console.
-  firebase_crashlytics: ^0.1.3+3
+  # TODO: Add `newsapi_client` plugin for News API service
 
-  # Flutter plugin for Firebase Remote Config. Update your application	
-  # look and feel and behaviour without re-releasing.	
-  firebase_remote_config: ^0.3.0+3
+  # TODO: Add `flutter_picker` plugin for picker dialog
 
-  # Flutter plugin picker. Includes NumberPicker, DateTimePicker,
-  # ArrayPicker, and default linkage Picker. Provides flexible parameters
-  # to meet various needs.
-  flutter_picker: ^1.1.3
+  # TODO: Add `shared_preferences` plugin for handling caching
 
-  # News API (v2) client written in Dart.
-  newsapi_client: ^0.2.5+2
-
-  # Flutter plugin for reading and writing simple key-value pairs.
-  # Wraps NSUserDefaults on iOS and SharedPreferences on Android.
-  shared_preferences: ^0.5.6+3
-
-  # Community-version-plugin that allows Flutter to communicate with a native webview. 
-  # Note that this plugin is planned to merge with the main one (`webview_flutter`) at 
-  # some point as it's currently in the works with the Flutter Team.
-  flutter_webview_plugin: ^0.3.11
+  # TODO: Add `flutter_webview_plugin` plugin for webviews
 
 dev_dependencies:
   flutter_test:
@@ -96,6 +79,6 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages
 
-  assets:
-    - assets/news_sources.json
-    - assets/images/news_api_attribution_image.png
+  # TODO: Add asset for static JSON metadata file consisting of a list of news sources
+  # TODO: Add image for News API attribution image
+  
