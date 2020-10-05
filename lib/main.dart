@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dnd_headlines/utils/Strings.dart';
+import 'package:dnd_headlines/model/HeadlineResponse.dart';
+import 'package:newsapi_client/newsapi_client.dart';
 
 /// TODO: Replace with News API key
 final String _newsApiKey = '[INSERT API KEY HERE]';
@@ -15,16 +17,22 @@ class DndHeadlinesMainWidget extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blueGrey,
       ),
-      /// TODO: Add a `FutureBuilder` widget here for initiating async ops for data
       /// TODO: Set up logic for computed data from newly created `FutureBuilder` to render respective widgets (i.e. data, empty state, and progress bar)
-      home: Container(
-        child: Text('Hello World! Let\'s get started!'),
+      home: FutureBuilder<Headline>(
+        future: getNewsSources(),
+        builder: (BuildContext context, AsyncSnapshot<Headline> snapshot) {
+          if (snapshot.hasData) {
+            snapshot.data.log();
+            return Container(child: Text("Success!"),);
+          } else if (snapshot.hasError) {
+            return Container(child: Text("Error..."),);
+          } else {
+            return Container(child: Text("Loading..."),);
+          }
+        }
       ),
     );
   }
-
-  /// TODO: Create a getter function for data to pass in as the async computation param in the `FutureBuilder` above
-
 }
 
 
@@ -47,7 +55,18 @@ class DndHeadlinesMainWidget extends StatelessWidget {
 
 /// TODO: Add helper functions for handling caching logic for a selected news source
 
-/// TODO: Add helper, getter function for news source data
+Future<Headline> getNewsSources() async {
+  final client = NewsapiClient(_newsApiKey);
+  final sourceList = ['google-news'];
+  final response = await client.request(TopHeadlines(
+      sources: sourceList,
+      pageSize: 10
+  ));
+  final headline = Headline.fromJson(response);
+  headline.log();
+
+  return headline;
+}
 
 
 
