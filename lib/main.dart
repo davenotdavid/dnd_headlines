@@ -23,11 +23,11 @@ class DndHeadlinesMainWidget extends StatelessWidget {
         builder: (BuildContext context, AsyncSnapshot<Headline> snapshot) {
           if (snapshot.hasData) {
             snapshot.data.log();
-            return Container(child: Text("Success!"),);
+            return Center(child: Text("Success!"),);
           } else if (snapshot.hasError) {
-            return Container(child: Text("Error..."),);
+            return Center(child: Text("Error..."),);
           } else {
-            return Container(child: Text("Loading..."),);
+            return Center(child: Text("Loading..."),);
           }
         }
       ),
