@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dnd_headlines/utils/Strings.dart';
 import 'package:dnd_headlines/model/HeadlineResponse.dart';
 import 'package:newsapi_client/newsapi_client.dart';
-
-/// TODO: Replace with News API key
-final String _newsApiKey = '[INSERT API KEY HERE]';
+import 'package:dnd_headlines/utils/Keys.dart';
 
 void main() => runApp(DndHeadlinesMainWidget());
 
@@ -13,7 +11,7 @@ class DndHeadlinesMainWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: Strings.appName,
+      title: Strings.APP_NAME,
       theme: ThemeData(
         primarySwatch: Colors.blueGrey,
       ),
@@ -56,7 +54,7 @@ class DndHeadlinesMainWidget extends StatelessWidget {
 /// TODO: Add helper functions for handling caching logic for a selected news source
 
 Future<Headline> getNewsSources() async {
-  final client = NewsapiClient(_newsApiKey);
+  final client = NewsapiClient(Keys.NEWS_API_KEY);
   final sourceList = ['google-news'];
   final response = await client.request(TopHeadlines(
       sources: sourceList,

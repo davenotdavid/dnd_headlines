@@ -1,5 +1,5 @@
 class Strings {
 
-  static final String appName = 'DND Headlines';
+  static final String APP_NAME = 'DND Headlines';
 
 }
