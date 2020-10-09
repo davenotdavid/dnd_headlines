@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dnd_headlines/utils/Strings.dart';
 
-/// TODO: Replace with News API key
-final String _newsApiKey = '[INSERT API KEY HERE]';
-
 void main() => runApp(DndHeadlinesMainWidget());
 
 class DndHeadlinesMainWidget extends StatelessWidget {
