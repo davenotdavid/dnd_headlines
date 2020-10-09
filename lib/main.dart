@@ -17,7 +17,7 @@ class DndHeadlinesMainWidget extends StatelessWidget {
       ),
       /// TODO: Add a `FutureBuilder` widget here for initiating async ops for data
       /// TODO: Set up logic for computed data from newly created `FutureBuilder` to render respective widgets (i.e. data, empty state, and progress bar)
-      home: Container(
+      home: Center(
         child: Text('Hello World! Let\'s get started!'),
       ),
     );
