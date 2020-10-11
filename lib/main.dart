@@ -4,6 +4,8 @@ import 'package:dnd_headlines/model/HeadlineResponse.dart';
 import 'package:newsapi_client/newsapi_client.dart';
 import 'package:dnd_headlines/utils/Keys.dart';
 
+final client = NewsapiClient(Keys.NEWS_API_KEY);
+
 void main() => runApp(DndHeadlinesMainWidget());
 
 class DndHeadlinesMainWidget extends StatelessWidget {
@@ -20,7 +22,6 @@ class DndHeadlinesMainWidget extends StatelessWidget {
         future: getNewsSources(),
         builder: (BuildContext context, AsyncSnapshot<Headline> snapshot) {
           if (snapshot.hasData) {
-            snapshot.data.log();
             return Center(child: Text("Success!"),);
           } else if (snapshot.hasError) {
             return Center(child: Text("Error..."),);
@@ -54,7 +55,6 @@ class DndHeadlinesMainWidget extends StatelessWidget {
 /// TODO: Add helper functions for handling caching logic for a selected news source
 
 Future<Headline> getNewsSources() async {
-  final client = NewsapiClient(Keys.NEWS_API_KEY);
   final sourceList = ['google-news'];
   final response = await client.request(TopHeadlines(
       sources: sourceList,
