@@ -1,8 +1,6 @@
+import 'package:flutter/material.dart';
 
-
-/// TODO: Import `foundation.dart` package to extend from `ChangeNotifier` for listeners
-
-class Headline {
+class Headline extends ChangeNotifier {
 
   String status;
   int totalResults;

@@ -35,10 +35,26 @@ class DndHeadlinesMainWidget extends StatelessWidget {
 }
 
 
+class HeadlineWidget extends AnimatedWidget {
+
+  final Headline headline;
+
+  HeadlineWidget({this.headline}) : super(listenable: headline);
+  
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
+  
+  
+}
+
 
 
 /// TODO: Add stateful widget that reactively rebuilds itself each time data changes
 /// TODO: Place headline article data in list view widget as part of Scaffold body param
+/// 
 /// TODO: Handle tap logic to transition to webview (plugin) for article to open
 /// TODO: Wrap list view widget (and empty state text) in `RefreshIndicator` widget with refresh logic
 /// TODO: Create a helper function for time difference logic as subtitle text for each article list card
@@ -46,7 +62,6 @@ class DndHeadlinesMainWidget extends StatelessWidget {
 /// TODO: As part of Scaffold widget, add an app bar with a title and an action to handle a new source selection via `flutter_picker` plugin
 /// TODO: With the picker dialog, handle logic for when a different new source is selected and then cache it
 /// TODO: Use `GestureDetector` widget for News API attribution image at the bottom
-
 
 
 
