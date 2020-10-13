@@ -22,7 +22,7 @@ class DndHeadlinesMainWidget extends StatelessWidget {
         future: getNewsSources(),
         builder: (BuildContext context, AsyncSnapshot<Headline> snapshot) {
           if (snapshot.hasData) {
-            return Center(child: Text("Success!"),);
+            return HeadlineWidget(headline: snapshot.data);
           } else if (snapshot.hasError) {
             return Center(child: Text("Error..."),);
           } else {
@@ -43,11 +43,30 @@ class HeadlineWidget extends AnimatedWidget {
   
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(Strings.APP_NAME),
+      ),
+      body: _getHeadlineListViewWidget(),
+    );
   }
   
-  
+  Widget _getHeadlineListViewWidget() {
+    final articles = headline.articles;
+
+    return ListView.builder(
+      itemCount: articles.length,
+      itemBuilder: (BuildContext context, int index) {
+        final article = articles[index];
+        
+        return Card(
+          child: ListTile(
+            title: Text(article.title),
+          ),
+        );
+      },
+    );
+  }
 }
 
 
