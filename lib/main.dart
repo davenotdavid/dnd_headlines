@@ -1,3 +1,4 @@
+import 'package:dnd_headlines/utils/dimens.dart';
 import 'package:dnd_headlines/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:dnd_headlines/utils/strings.dart';
@@ -64,6 +65,12 @@ class HeadlineWidget extends AnimatedWidget {
           child: ListTile(
             title: Text(article.title),
             subtitle: Text(HelperFunctions.getTimeDifference(article.publishedAt)),
+            contentPadding: EdgeInsets.fromLTRB(
+              Dimens.paddingDefault,
+              (index == 0) ? Dimens.paddingOneHalf : 0.0,
+              Dimens.paddingDefault,
+              Dimens.paddingOneHalf
+            ),
           ),
         );
       },
