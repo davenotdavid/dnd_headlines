@@ -1,8 +1,9 @@
+import 'package:dnd_headlines/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
-import 'package:dnd_headlines/utils/Strings.dart';
-import 'package:dnd_headlines/model/HeadlineResponse.dart';
+import 'package:dnd_headlines/utils/strings.dart';
+import 'package:dnd_headlines/model/headline_response.dart';
 import 'package:newsapi_client/newsapi_client.dart';
-import 'package:dnd_headlines/utils/Keys.dart';
+import 'package:dnd_headlines/utils/keys.dart';
 
 final client = NewsapiClient(Keys.NEWS_API_KEY);
 
@@ -62,6 +63,7 @@ class HeadlineWidget extends AnimatedWidget {
         return Card(
           child: ListTile(
             title: Text(article.title),
+            subtitle: Text(HelperFunctions.getTimeDifference(article.publishedAt)),
           ),
         );
       },
