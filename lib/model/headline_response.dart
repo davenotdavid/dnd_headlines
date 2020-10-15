@@ -20,6 +20,18 @@ class Headline extends ChangeNotifier {
         'articles': articles
       };
 
+  String getArticleSourceName() {
+    try {
+      var article = articles.first;
+      var sourceName = article.source.name;
+      return sourceName;
+    } on StateError {
+      print('Error retrieving Headline object publisher\'s name.');
+    }
+
+    return null;
+  }
+
   void setHeadline(Headline headline) async {
     status = headline.status;
     totalResults = headline.totalResults;

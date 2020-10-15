@@ -49,7 +49,7 @@ class HeadlineWidget extends AnimatedWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(Strings.appName),
+        title: Text(headline.getArticleSourceName() ?? Strings.appName),
       ),
       body: _getHeadlineListViewWidget(),
     );
