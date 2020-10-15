@@ -1,5 +1,7 @@
 import 'package:dnd_headlines/utils/dimens.dart';
 import 'package:dnd_headlines/utils/helper_functions.dart';
+import 'package:dnd_headlines/widgets/helper_progress_bar_widget.dart';
+import 'package:dnd_headlines/widgets/helper_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:dnd_headlines/utils/strings.dart';
 import 'package:dnd_headlines/model/headline_response.dart';
@@ -26,9 +28,9 @@ class DndHeadlinesMainWidget extends StatelessWidget {
           if (snapshot.hasData) {
             return HeadlineWidget(headline: snapshot.data);
           } else if (snapshot.hasError) {
-            return Center(child: Text("Error..."),);
+            return HelperTextWidget(text: Strings.errorEmptyStateViewGetNewsSources);
           } else {
-            return Center(child: Text("Loading..."),);
+            return HelperProgressBarWidget();
           }
         }
       ),
@@ -77,7 +79,9 @@ class HeadlineWidget extends AnimatedWidget {
             );
           },
         )
-        : Center(child: Text(Strings.errorEmptyStateViewGetNewsSources),), 
+        : Center(
+            child: Text(Strings.errorEmptyStateViewGetNewsSources)
+          ), 
       onRefresh: () async {
         await getNewsSources()
             .then((headline) => this.headline.setHeadline(headline))
