@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:dnd_headlines/utils/Strings.dart';
+import 'package:dnd_headlines/utils/strings.dart';
 
 void main() => runApp(DndHeadlinesMainWidget());
 
