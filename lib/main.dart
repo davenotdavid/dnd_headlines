@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:dnd_headlines/utils/Strings.dart';
-import 'package:dnd_headlines/model/HeadlineResponse.dart';
+import 'package:dnd_headlines/utils/strings.dart';
+import 'package:dnd_headlines/model/headline_response.dart';
 import 'package:newsapi_client/newsapi_client.dart';
 import 'package:dnd_headlines/utils/Keys.dart';
 
@@ -57,8 +57,7 @@ class DndHeadlinesMainWidget extends StatelessWidget {
 Future<Headline> getNewsSources() async {
   final sourceList = ['google-news'];
   final response = await client.request(TopHeadlines(
-      sources: sourceList,
-      pageSize: 10
+      sources: sourceList
   ));
   final headline = Headline.fromJson(response);
   headline.log();
