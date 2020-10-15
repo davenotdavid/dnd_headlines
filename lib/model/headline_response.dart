@@ -20,7 +20,13 @@ class Headline extends ChangeNotifier {
         'articles': articles
       };
 
-  /// TODO: Add a setter function to notify registered listeners for diffs between existing and new [Headline] data
+  void setHeadline(Headline headline) async {
+    status = headline.status;
+    totalResults = headline.totalResults;
+    articles = headline.articles;
+
+    notifyListeners();
+  }
 
   void log() {
     print('{\"status\": \"$status\", \"totalResults\": $totalResults, '

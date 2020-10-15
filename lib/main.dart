@@ -15,7 +15,7 @@ class DndHeadlinesMainWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: Strings.APP_NAME,
+      title: Strings.appName,
       theme: ThemeData(
         primarySwatch: Colors.blueGrey,
       ),
@@ -47,7 +47,7 @@ class HeadlineWidget extends AnimatedWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(Strings.APP_NAME),
+        title: Text(Strings.appName),
       ),
       body: _getHeadlineListViewWidget(),
     );
@@ -56,24 +56,33 @@ class HeadlineWidget extends AnimatedWidget {
   Widget _getHeadlineListViewWidget() {
     final articles = headline.articles;
 
-    return ListView.builder(
-      itemCount: articles.length,
-      itemBuilder: (BuildContext context, int index) {
-        final article = articles[index];
-        
-        return Card(
-          child: ListTile(
-            title: Text(article.title),
-            subtitle: Text(HelperFunctions.getTimeDifference(article.publishedAt)),
-            contentPadding: EdgeInsets.fromLTRB(
-              Dimens.paddingDefault,
-              (index == 0) ? Dimens.paddingOneHalf : 0.0,
-              Dimens.paddingDefault,
-              Dimens.paddingOneHalf
-            ),
-          ),
-        );
-      },
+    return RefreshIndicator(
+      child: articles.isNotEmpty
+        ? ListView.builder(
+          itemCount: articles.length,
+          itemBuilder: (BuildContext context, int index) {
+            final article = articles[index];
+            
+            return Card(
+              child: ListTile(
+                title: Text(article.title),
+                subtitle: Text(HelperFunctions.getTimeDifference(article.publishedAt)),
+                contentPadding: EdgeInsets.fromLTRB(
+                  Dimens.paddingDefault,
+                  (index == 0) ? Dimens.paddingOneHalf : 0.0,
+                  Dimens.paddingDefault,
+                  Dimens.paddingOneHalf
+                ),
+              ),
+            );
+          },
+        )
+        : Center(child: Text(Strings.errorEmptyStateViewGetNewsSources),), 
+      onRefresh: () async {
+        await getNewsSources()
+            .then((headline) => this.headline.setHeadline(headline))
+            .catchError((error) => print(error));
+      }
     );
   }
 }
@@ -81,11 +90,8 @@ class HeadlineWidget extends AnimatedWidget {
 
 
 /// TODO: Add stateful widget that reactively rebuilds itself each time data changes
-/// TODO: Place headline article data in list view widget as part of Scaffold body param
 /// 
 /// TODO: Handle tap logic to transition to webview (plugin) for article to open
-/// TODO: Wrap list view widget (and empty state text) in `RefreshIndicator` widget with refresh logic
-/// TODO: Create a helper function for time difference logic as subtitle text for each article list card
 /// TODO: Create a helper function for filtering article data with say, a null or blank title
 /// TODO: As part of Scaffold widget, add an app bar with a title and an action to handle a new source selection via `flutter_picker` plugin
 /// TODO: With the picker dialog, handle logic for when a different new source is selected and then cache it
@@ -100,8 +106,7 @@ class HeadlineWidget extends AnimatedWidget {
 Future<Headline> getNewsSources() async {
   final sourceList = ['google-news'];
   final response = await client.request(TopHeadlines(
-      sources: sourceList,
-      pageSize: 10
+      sources: sourceList
   ));
   final headline = Headline.fromJson(response);
   headline.log();
