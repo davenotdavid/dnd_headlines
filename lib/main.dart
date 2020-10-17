@@ -21,7 +21,6 @@ class DndHeadlinesMainWidget extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blueGrey,
       ),
-      /// TODO: Set up logic for computed data from newly created `FutureBuilder` to render respective widgets (i.e. data, empty state, and progress bar)
       home: FutureBuilder<Headline>(
         future: getNewsSources(),
         builder: (BuildContext context, AsyncSnapshot<Headline> snapshot) {
@@ -93,11 +92,9 @@ class HeadlineWidget extends AnimatedWidget {
 
 
 
-/// TODO: Add stateful widget that reactively rebuilds itself each time data changes
-/// 
 /// TODO: Handle tap logic to transition to webview (plugin) for article to open
 /// TODO: Create a helper function for filtering article data with say, a null or blank title
-/// TODO: As part of Scaffold widget, add an app bar with a title and an action to handle a new source selection via `flutter_picker` plugin
+/// TODO: As part of Scaffold widget, add an app bar with an action to handle a new source selection via `flutter_picker` plugin
 /// TODO: With the picker dialog, handle logic for when a different new source is selected and then cache it
 /// TODO: Use `GestureDetector` widget for News API attribution image at the bottom
 
