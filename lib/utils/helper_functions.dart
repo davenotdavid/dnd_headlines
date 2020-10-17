@@ -2,8 +2,9 @@ class HelperFunctions {
 
   static String getTimeDifference(String otherTime) {
     try {
-      final otherDateTime = DateTime.parse(otherTime);
-      final timeDifference = DateTime.now().difference(otherDateTime);
+      final otherDateTime = DateTime.parse(otherTime).toLocal();
+      final currentDateTime = DateTime.now();
+      final timeDifference = currentDateTime.difference(otherDateTime);
       final days = timeDifference.inDays;
       if (days > 0) {
         return (days == 1) ? '$days day ago' : '$days days ago';
