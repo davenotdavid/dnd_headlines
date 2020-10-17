@@ -13,7 +13,7 @@ class DndHeadlinesMainWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: Strings.APP_NAME,
+      title: Strings.appName,
       theme: ThemeData(
         primarySwatch: Colors.blueGrey,
       ),
