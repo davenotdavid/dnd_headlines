@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:dnd_headlines/res/Strings.dart';
+import 'package:dnd_headlines/res/strings.dart';
 
 /// Helper progress widget to include other material components wrapping the 
 /// [CircularProgressIndicator].
