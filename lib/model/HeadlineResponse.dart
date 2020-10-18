@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
-import 'package:dnd_headlines/app/DndHeadlinesApp.dart';
-import 'package:dnd_headlines/res/Strings.dart';
+import 'package:dnd_headlines/app/dnd_headlines_app.dart';
+import 'package:dnd_headlines/res/strings.dart';
 
 /**
  * Sample headline response from the News API package client:

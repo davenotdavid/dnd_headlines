@@ -1,4 +1,4 @@
-import 'package:dnd_headlines/app/DndHeadlinesApp.dart';
+import 'package:dnd_headlines/app/dnd_headlines_app.dart';
 import 'package:dnd_headlines/model/HeadlineResponse.dart';
 
 /// Disclaimer: Extension functions not supported yet as of Dart 2

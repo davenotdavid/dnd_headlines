@@ -1,15 +1,15 @@
 import 'dart:convert';
 
-import 'package:dnd_headlines/res/Dimens.dart';
+import 'package:dnd_headlines/res/dimens.dart';
 import 'package:flutter/material.dart';
 
-import 'package:dnd_headlines/app/DndHeadlinesApp.dart';
+import 'package:dnd_headlines/app/dnd_headlines_app.dart';
 import 'package:dnd_headlines/model/HeadlineResponse.dart';
-import 'package:dnd_headlines/util/Constants.dart';
-import 'package:dnd_headlines/util/HelperFunctions.dart';
-import 'package:dnd_headlines/util/widget/DndTextViewWidget.dart';
-import 'package:dnd_headlines/util/widget/DndProgressIndicatorWidget.dart';
-import 'package:dnd_headlines/res/Strings.dart';
+import 'package:dnd_headlines/util/constants.dart';
+import 'package:dnd_headlines/util/helper_functions.dart';
+import 'package:dnd_headlines/util/widget/helper_text_widget.dart';
+import 'package:dnd_headlines/util/widget/helper_progress_bar_widget.dart';
+import 'package:dnd_headlines/res/strings.dart';
 
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter_picker/flutter_picker.dart';
