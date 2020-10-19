@@ -30,7 +30,7 @@ dependencies:
 
   # TODO: Add `shared_preferences` plugin for handling caching
 
-  # TODO: Add `flutter_webview_plugin` plugin for webviews
+  webview_flutter: ^1.0.3
 
 dev_dependencies:
   flutter_test:
