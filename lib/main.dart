@@ -8,6 +8,7 @@ import 'package:dnd_headlines/widgets/helper_article_webview_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:dnd_headlines/utils/strings.dart';
 import 'package:dnd_headlines/model/headline_response.dart';
+import 'package:flutter_picker/Picker.dart';
 import 'package:newsapi_client/newsapi_client.dart';
 import 'package:dnd_headlines/utils/keys.dart';
 
@@ -52,6 +53,15 @@ class HeadlineWidget extends AnimatedWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(headline.getArticleSourceName() ?? Strings.appName),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.collections_bookmark),
+            alignment: Alignment.centerRight,
+            onPressed: () {
+              _showPickerDialog(context);
+            },
+          )
+        ],
       ),
       body: _getHeadlineListViewWidget(),
     );
@@ -99,12 +109,33 @@ class HeadlineWidget extends AnimatedWidget {
       }
     );
   }
+
+  void _showPickerDialog(BuildContext context) async {
+    final newsSources = await loadNewsSourcesJson(context);
+    final sourceNames = newsSources.map((source) => source.name).toList();
+
+    new Picker(
+      adapter: PickerDataAdapter<String>(pickerdata: sourceNames),
+      hideHeader: true,
+      title: new Text(Strings.newsSourcePickerDialogTitle),
+      onConfirm: (Picker picker, List value) {
+        _onNewsSourceSelected(newsSources, value);
+      }
+    ).showDialog(context);
+  }
+
+  void _onNewsSourceSelected(List<Source> newsSources, List value) async {
+    final sourceId = newsSources[value[0]].id;
+
+    await getNewsSources(sourceId: sourceId)
+        .then((headline) => this.headline.setHeadline(headline))
+        .catchError((error) => print(error));
+  }
 }
 
 
 
 /// TODO: Create a helper function for filtering article data with say, a null or blank title
-/// TODO: As part of Scaffold widget, add an app bar with an action to handle a new source selection via `flutter_picker` plugin
 /// TODO: With the picker dialog, handle logic for when a different new source is selected and then cache it
 /// TODO: Use `GestureDetector` widget for News API attribution image at the bottom
 
@@ -113,15 +144,15 @@ class HeadlineWidget extends AnimatedWidget {
 Future<List<Source>> loadNewsSourcesJson(BuildContext context) async {
   String data = await DefaultAssetBundle.of(context).loadString('assets/news_sources.json');
   final jsonResult = json.decode(data);
-  final newsSources = (jsonResult as List).map((i) => Source.fromJson(i)).toList();
+  final newsSources = (jsonResult as List).map((e) => Source.fromJson(e)).toList();
 
   return newsSources;
 }
 
 /// TODO: Add helper functions for handling caching logic for a selected news source
 
-Future<Headline> getNewsSources() async {
-  final sourceList = ['google-news'];
+Future<Headline> getNewsSources({String sourceId: Strings.newsSourcePrefIdDefault}) async {
+  final sourceList = [sourceId];
   final response = await client.request(TopHeadlines(
       sources: sourceList
   ));

@@ -26,7 +26,7 @@ dependencies:
 
   newsapi_client: ^0.2.5+2
 
-  # TODO: Add `flutter_picker` plugin for picker dialog
+  flutter_picker: ^1.1.5
 
   # TODO: Add `shared_preferences` plugin for handling caching
 

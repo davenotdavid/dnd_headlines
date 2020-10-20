@@ -11,7 +11,7 @@ class Headline extends ChangeNotifier {
   Headline.fromJson(Map<String, dynamic> json) :
         status = json['status'],
         totalResults = json['totalResults'],
-        articles = (json['articles'] as List).map((i) => Article.fromJson(i)).toList();
+        articles = (json['articles'] as List).map((e) => Article.fromJson(e)).toList();
 
   Map<String, dynamic> toJson() =>
       {

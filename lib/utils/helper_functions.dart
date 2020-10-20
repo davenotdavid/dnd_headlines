@@ -1,4 +1,14 @@
+import 'package:dnd_headlines/model/headline_response.dart';
+
 class HelperFunctions {
+
+  static List<String> getSourceNames(List<Source> sources) {
+    final sourceNames = new List<String>();
+    sources.forEach((source) => sourceNames.add(source.name));
+
+    return sourceNames;
+  }
+
 
   static String getTimeDifference(String otherTime) {
     try {
