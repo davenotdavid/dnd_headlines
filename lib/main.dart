@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dnd_headlines/utils/dimens.dart';
 import 'package:dnd_headlines/utils/helper_functions.dart';
 import 'package:dnd_headlines/widgets/helper_progress_bar_widget.dart';
@@ -101,7 +103,6 @@ class HeadlineWidget extends AnimatedWidget {
 
 
 
-/// TODO: Handle tap logic to transition to webview (plugin) for article to open
 /// TODO: Create a helper function for filtering article data with say, a null or blank title
 /// TODO: As part of Scaffold widget, add an app bar with an action to handle a new source selection via `flutter_picker` plugin
 /// TODO: With the picker dialog, handle logic for when a different new source is selected and then cache it
@@ -109,7 +110,13 @@ class HeadlineWidget extends AnimatedWidget {
 
 
 
-/// TODO: Add a helper function to decode static JSON metadata file for a list of news sources returned
+Future<List<Source>> loadNewsSourcesJson(BuildContext context) async {
+  String data = await DefaultAssetBundle.of(context).loadString('assets/news_sources.json');
+  final jsonResult = json.decode(data);
+  final newsSources = (jsonResult as List).map((i) => Source.fromJson(i)).toList();
+
+  return newsSources;
+}
 
 /// TODO: Add helper functions for handling caching logic for a selected news source
 

@@ -79,6 +79,7 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages
 
-  # TODO: Add asset for static JSON metadata file consisting of a list of news sources
+  assets:
+    - assets/news_sources.json
   # TODO: Add image for News API attribution image
   
