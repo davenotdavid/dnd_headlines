@@ -6,5 +6,6 @@ class Strings {
 
   static final String newsSourcePickerDialogTitle = 'Select Media';
   static const String newsSourcePrefIdDefault = 'google-news';
+  static final String newsSourcePrefKey = 'news_source_pref_key';
 
 }

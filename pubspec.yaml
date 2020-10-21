@@ -28,7 +28,7 @@ dependencies:
 
   flutter_picker: ^1.1.5
 
-  # TODO: Add `shared_preferences` plugin for handling caching
+  shared_preferences: ^0.5.12+2
 
   webview_flutter: ^1.0.3
 
