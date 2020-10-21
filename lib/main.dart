@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:dnd_headlines/res/dimens.dart';
+import 'package:dnd_headlines/util/widget/helper_webview_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dnd_headlines/app/dnd_headlines_app.dart';
-import 'package:dnd_headlines/model/HeadlineResponse.dart';
-import 'package:dnd_headlines/util/constants.dart';
+import 'package:dnd_headlines/model/headline_response.dart';
 import 'package:dnd_headlines/util/helper_functions.dart';
 import 'package:dnd_headlines/util/widget/helper_text_widget.dart';
 import 'package:dnd_headlines/util/widget/helper_progress_bar_widget.dart';
@@ -13,13 +13,11 @@ import 'package:dnd_headlines/res/strings.dart';
 
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter_picker/flutter_picker.dart';
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:newsapi_client/newsapi_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Fields used throughout this file.
 String _newsApiKey;
-String _sourceId;
 
 void main() => runApp(DndHeadlinesRootWidget());
 
@@ -51,17 +49,11 @@ class DndHeadlinesRootWidget extends StatelessWidget {
     );
   }
 
-  /// Inits field instances used throughout this app prior to retrieving headline 
-  /// data during the initial session.
   Future<Headline> _initDataAndGetHeadlines() async {
     final remoteConfig = await getRemoteConfig();	
     _newsApiKey = remoteConfig.getString(Strings.newsApiKey);
 
-    await getNewsSourcePrefId()
-        .then((sourcePrefId) => _sourceId = sourcePrefId)
-        .catchError((error) => DndHeadlinesApp.log(error));
-
-    return getNewsSources(_newsApiKey, _sourceId);
+    return getNewsSources();
   }
 
 }
@@ -73,7 +65,7 @@ class HeadlineWidget extends AnimatedWidget {
 
   final Headline headline;
 
-  HeadlineWidget({this.headline}) : super(listenable: headline);
+  HeadlineWidget({@required this.headline}) : super(listenable: headline);
 
   /// Lays out the top [Headline] news data via a [ListView] should there be data,
   /// otherwise an empty view is shown. A user can also change the news publisher 
@@ -98,10 +90,7 @@ class HeadlineWidget extends AnimatedWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => WebviewScaffold(
-                url: Strings.newsApiUrl,
-                appBar: AppBar(title: Text(Strings.appName))
-              )
+            MaterialPageRoute(builder: (context) => HelperWebViewWidget(Strings.newsApiUrl)
             ),
           );
         },
@@ -139,11 +128,9 @@ class HeadlineWidget extends AnimatedWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => 
-                      WebviewScaffold(
-                        url: article.url,
-                        appBar: AppBar(title: Text(article.title)),
-                        clearCache: true,
-                        appCacheEnabled: false,
+                      HelperWebViewWidget(
+                        article.url,
+                        appBarTitle: article.title,
                       )
                     )
                   );
@@ -153,7 +140,7 @@ class HeadlineWidget extends AnimatedWidget {
           })
         : Center(child: Text(Strings.errorEmptyStateViewGetNewsSources)),
       onRefresh: () async {
-        await getNewsSources(_newsApiKey, _sourceId)
+        await getNewsSources()
             .then((headline) => this.headline.setHeadline(headline))
             .catchError((error) => DndHeadlinesApp.log(error));
       }
@@ -163,13 +150,11 @@ class HeadlineWidget extends AnimatedWidget {
   /// Displays a [Picker] dialog of a list of news publisher options after 
   /// decoding the news source JSON metadata.
   void _showPickerDialog(BuildContext context) async {
-    final newsSources = List<Source>();
-    await loadNewsSourcesJson(context)
-        .then((sources) => newsSources.addAll(sources))
-        .catchError((error) => DndHeadlinesApp.log(error));
+    final newsSources = await loadNewsSourcesJson(context);
+    final sourceNames = newsSources.map((source) => source.name).toList();
 
     new Picker(
-      adapter: PickerDataAdapter<String>(pickerdata: HelperFunctions.getSourceNames(newsSources)),
+      adapter: PickerDataAdapter<String>(pickerdata: sourceNames),
       hideHeader: true,
       title: new Text(Strings.newsSourcePickerDialogTitle),
       onConfirm: (Picker picker, List value) {
@@ -182,23 +167,21 @@ class HeadlineWidget extends AnimatedWidget {
   /// [Headline] data with the selected source's ID (and sets and caches it), and 
   /// then rebuilds this widget with new data.
   void _onNewsSourceSelected(List<Source> newsSources, List value) async {
-    _sourceId = newsSources[value[0]].id;
-    await setNewsSourcePrefId(_sourceId);
+    final sourceId = newsSources[value[0]].id;
+    await setNewsSourcePrefId(sourceId);
 
-    await getNewsSources(_newsApiKey, _sourceId)
+    await getNewsSources()
         .then((headline) => this.headline.setHeadline(headline))
         .catchError((error) => DndHeadlinesApp.log(error));
   }
 
 }
 
-/// TODO: The following helper functions are used universally, so move them somewhere more reasonable (i.e. API interface, service layer, and etc.)
-
 /// Returns a list of [Source]s after decoding the static JSON metadata file.
 Future<List<Source>> loadNewsSourcesJson(BuildContext context) async {
   String data = await DefaultAssetBundle.of(context).loadString(Strings.newsSourceJsonPath);
   final jsonResult = json.decode(data);
-  final newsSources = (jsonResult as List).map((i) => Source.fromJson(i)).toList();
+  final newsSources = (jsonResult as List).map((e) => Source.fromJson(e)).toList();
 
   return newsSources;
 }
@@ -216,14 +199,14 @@ Future<void> setNewsSourcePrefId(String sourceId) async {
 }
 
 /// GET call for news source data.
-Future<Headline> getNewsSources(String apiKey, String sourceId) async {
+Future<Headline> getNewsSources() async {
   /// JSON decoding occurs deep under the hood within the following News API 
   /// package implementation.
-  final client = NewsapiClient(apiKey);
-  final sourceList = [sourceId ?? Strings.newsSourcePrefIdDefault];
+  final sourceId = await getNewsSourcePrefId();
+  final client = NewsapiClient(_newsApiKey);
+  final sourceList = [sourceId];
   final response = await client.request(TopHeadlines(
-      sources: sourceList, /// Source ID as the identifier
-      pageSize: Constants.defaultPageSize
+      sources: sourceList /// Source ID as the identifier
   ));
   final headline = Headline.fromJson(response);
   headline.log();

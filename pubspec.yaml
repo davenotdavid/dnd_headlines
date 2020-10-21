@@ -44,10 +44,8 @@ dependencies:
   # Wraps NSUserDefaults on iOS and SharedPreferences on Android.
   shared_preferences: ^0.5.6+3
 
-  # Community-version-plugin that allows Flutter to communicate with a native webview. 
-  # Note that this plugin is planned to merge with the main one (`webview_flutter`) at 
-  # some point as it's currently in the works with the Flutter Team.
-  flutter_webview_plugin: ^0.3.11
+  # Webview plug-in from the Flutter team (instead of the community-run one)
+  webview_flutter: ^1.0.4
 
 dev_dependencies:
   flutter_test:
