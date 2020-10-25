@@ -136,7 +136,6 @@ class HeadlineWidget extends AnimatedWidget {
 
 
 
-/// TODO: Create a helper function for filtering article data with say, a null or blank title
 /// TODO: Use `GestureDetector` widget for News API attribution image at the bottom
 
 
