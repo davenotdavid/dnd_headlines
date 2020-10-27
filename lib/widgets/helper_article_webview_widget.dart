@@ -1,22 +1,23 @@
-import 'package:dnd_headlines/model/headline_response.dart';
+import 'package:dnd_headlines/utils/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class HelperArticleWebViewWidget extends StatelessWidget {
+class HelperWebViewWidget extends StatelessWidget {
 
-  final Article article;
+  final String url;
+  final String appBarTitle;
 
-  HelperArticleWebViewWidget({@required this.article});
+  HelperWebViewWidget(this.url, {this.appBarTitle = Strings.appName});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(article.title)
+        title: Text(appBarTitle)
       ),
       body: Center(
         child: WebView(
-          initialUrl: article.url,
+          initialUrl: url,
           javascriptMode: JavascriptMode.unrestricted,
         )
       ),

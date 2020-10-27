@@ -81,5 +81,5 @@ flutter:
 
   assets:
     - assets/news_sources.json
-  # TODO: Add image for News API attribution image
+    - assets/images/news_api_attribution_image.png
   

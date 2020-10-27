@@ -65,6 +65,15 @@ class HeadlineWidget extends AnimatedWidget {
         ],
       ),
       body: _getHeadlineListViewWidget(),
+      bottomNavigationBar: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => HelperWebViewWidget(Strings.newsApiUrl, appBarTitle: Strings.newsApi,))
+          );
+        },
+        child: Image.asset('assets/images/news_api_attribution_image.png')
+      ),
     );
   }
   
@@ -91,9 +100,7 @@ class HeadlineWidget extends AnimatedWidget {
                 onTap: () {
                   Navigator.push(
                     context, 
-                    MaterialPageRoute(builder: (context) => 
-                      HelperArticleWebViewWidget(article: article)
-                    )
+                    MaterialPageRoute(builder: (context) => HelperWebViewWidget(article.url, appBarTitle: article.title,))
                   );
                 },
               ),
@@ -133,12 +140,6 @@ class HeadlineWidget extends AnimatedWidget {
         .catchError((error) => print(error));
   }
 }
-
-
-
-/// TODO: Use `GestureDetector` widget for News API attribution image at the bottom
-
-
 
 Future<List<Source>> loadNewsSourcesJson(BuildContext context) async {
   String data = await DefaultAssetBundle.of(context).loadString('assets/news_sources.json');
