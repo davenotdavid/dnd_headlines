@@ -4,7 +4,7 @@ import 'package:dnd_headlines/utils/dimens.dart';
 import 'package:dnd_headlines/utils/helper_functions.dart';
 import 'package:dnd_headlines/widgets/helper_progress_bar_widget.dart';
 import 'package:dnd_headlines/widgets/helper_text_widget.dart';
-import 'package:dnd_headlines/widgets/helper_article_webview_widget.dart';
+import 'package:dnd_headlines/widgets/helper_webview_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:dnd_headlines/utils/strings.dart';
 import 'package:dnd_headlines/model/headline_response.dart';
