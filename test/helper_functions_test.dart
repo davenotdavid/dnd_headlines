@@ -14,5 +14,11 @@ void main() {
       
       expect(timeDiff.contains('hours ago'), false);
     });
+
+    test('difference parsing error catch returns empty string', () {
+      final timeDiff = HelperFunctions.getTimeDifference('2020--01-01T00:00:00+00:00');
+      
+      expect(timeDiff, '');
+    });
   });
 }
