@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() {
   final client = NewsapiClient(Keys.NEWS_API_KEY);
 
-  group('Get top headlines without cache', () {
+  group('Get top headlines without cached source pref ID', () {
     setUp(() {
       SharedPreferences.setMockInitialValues({});
     });
@@ -27,19 +27,31 @@ void main() {
 
       expect(response, isA<Headline>());
     });
+
+    test('headline\'s article source name matches', () async {
+      final response = await getNewsSources(client);
+
+      expect(response.getArticleSourceName(), 'Google News');
+    });
   });
 
-  group('Get top headlines with cache', () {
+  group('Get top headlines with cached source pref ID', () {
     setUp(() {
       SharedPreferences.setMockInitialValues({
         Strings.newsSourcePrefKey: 'ars-technica'
       });
     });
 
-    test('deserialized response from cached source pref ID is a Headline type', () async {
+    test('deserialized response is a Headline type', () async {
       final response = await getNewsSources(client);
 
       expect(response, isA<Headline>());
+    });
+
+    test('headline\'s article source name matches', () async {
+      final response = await getNewsSources(client);
+
+      expect(response.getArticleSourceName(), 'Ars Technica');
     });
   });
 }
