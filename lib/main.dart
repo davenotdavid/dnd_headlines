@@ -27,7 +27,7 @@ class DndHeadlinesMainWidget extends StatelessWidget {
         primarySwatch: Colors.blueGrey,
       ),
       home: FutureBuilder<Headline>(
-        future: getNewsSources(),
+        future: getNewsSources(client),
         builder: (BuildContext context, AsyncSnapshot<Headline> snapshot) {
           if (snapshot.hasData) {
             return HeadlineWidget(headline: snapshot.data);
@@ -111,7 +111,7 @@ class HeadlineWidget extends AnimatedWidget {
             child: Text(Strings.errorEmptyStateViewGetNewsSources)
           ), 
       onRefresh: () async {
-        await getNewsSources()
+        await getNewsSources(client)
             .then((headline) => this.headline.setHeadline(headline))
             .catchError((error) => print(error));
       }
@@ -135,7 +135,7 @@ class HeadlineWidget extends AnimatedWidget {
   void _onNewsSourceSelected(List<Source> newsSources, List value) async {
     final sourceId = newsSources[value[0]].id;
     await setNewsSourcePrefId(sourceId);
-    await getNewsSources()
+    await getNewsSources(client)
         .then((headline) => this.headline.setHeadline(headline))
         .catchError((error) => print(error));
   }
@@ -159,7 +159,7 @@ Future<void> setNewsSourcePrefId(String sourceId) async {
   prefs.setString(Strings.newsSourcePrefKey, sourceId);
 }
 
-Future<Headline> getNewsSources() async {
+Future<Headline> getNewsSources(NewsapiClient client) async {
   final sourceId = await getNewsSourcePrefId();
   final sourceList = [sourceId];
   final response = await client.request(TopHeadlines(
