@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dnd_headlines/api/news_api_repository.dart';
 import 'package:dnd_headlines/utils/dimens.dart';
 import 'package:dnd_headlines/utils/helper_functions.dart';
 import 'package:dnd_headlines/widgets/helper_progress_bar_widget.dart';
@@ -9,11 +10,30 @@ import 'package:flutter/material.dart';
 import 'package:dnd_headlines/utils/strings.dart';
 import 'package:dnd_headlines/model/headline_response.dart';
 import 'package:flutter_picker/Picker.dart';
-import 'package:newsapi_client/newsapi_client.dart';
-import 'package:dnd_headlines/utils/keys.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final client = NewsapiClient(Keys.NEWS_API_KEY);
+final newsApiRepo = NewsApiRepository();
+
+// TODO: Finalize placement (i.e. move to `helper_functions.dart`)?
+// Helper functions
+
+Future<List<Source>> loadNewsSourcesJson(BuildContext context) async {
+  String data = await DefaultAssetBundle.of(context).loadString('assets/news_sources.json');
+  final jsonResult = json.decode(data);
+  final newsSources = (jsonResult as List).map((e) => Source.fromJson(e)).toList();
+
+  return newsSources;
+}
+
+Future<String> getNewsSourcePrefId() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getString(Strings.newsSourcePrefKey) ?? Strings.newsSourcePrefIdDefault;
+}
+
+Future<void> setNewsSourcePrefId(String sourceId) async {
+  final prefs = await SharedPreferences.getInstance();
+  prefs.setString(Strings.newsSourcePrefKey, sourceId);
+}
 
 void main() => runApp(DndHeadlinesMainWidget());
 
@@ -27,7 +47,7 @@ class DndHeadlinesMainWidget extends StatelessWidget {
         primarySwatch: Colors.blueGrey,
       ),
       home: FutureBuilder<Headline>(
-        future: getNewsSources(client),
+        future: _initHeadlineData(),
         builder: (BuildContext context, AsyncSnapshot<Headline> snapshot) {
           if (snapshot.hasData) {
             return HeadlineWidget(headline: snapshot.data);
@@ -40,8 +60,12 @@ class DndHeadlinesMainWidget extends StatelessWidget {
       ),
     );
   }
-}
 
+  Future<Headline> _initHeadlineData() async {
+    final sourceId = await getNewsSourcePrefId();
+    return newsApiRepo.getTopHeadlines(sourceId);
+  }
+}
 
 class HeadlineWidget extends AnimatedWidget {
 
@@ -111,7 +135,8 @@ class HeadlineWidget extends AnimatedWidget {
             child: Text(Strings.errorEmptyStateViewGetNewsSources)
           ), 
       onRefresh: () async {
-        await getNewsSources(client)
+        final sourceId = await getNewsSourcePrefId();
+        await newsApiRepo.getTopHeadlines(sourceId)
             .then((headline) => this.headline.setHeadline(headline))
             .catchError((error) => print(error));
       }
@@ -135,42 +160,8 @@ class HeadlineWidget extends AnimatedWidget {
   void _onNewsSourceSelected(List<Source> newsSources, List value) async {
     final sourceId = newsSources[value[0]].id;
     await setNewsSourcePrefId(sourceId);
-    await getNewsSources(client)
+    await newsApiRepo.getTopHeadlines(sourceId)
         .then((headline) => this.headline.setHeadline(headline))
         .catchError((error) => print(error));
   }
 }
-
-Future<List<Source>> loadNewsSourcesJson(BuildContext context) async {
-  String data = await DefaultAssetBundle.of(context).loadString('assets/news_sources.json');
-  final jsonResult = json.decode(data);
-  final newsSources = (jsonResult as List).map((e) => Source.fromJson(e)).toList();
-
-  return newsSources;
-}
-
-Future<String> getNewsSourcePrefId() async {
-  final prefs = await SharedPreferences.getInstance();
-  return prefs.getString(Strings.newsSourcePrefKey) ?? Strings.newsSourcePrefIdDefault;
-}
-
-Future<void> setNewsSourcePrefId(String sourceId) async {
-  final prefs = await SharedPreferences.getInstance();
-  prefs.setString(Strings.newsSourcePrefKey, sourceId);
-}
-
-Future<Headline> getNewsSources(NewsapiClient client) async {
-  final sourceId = await getNewsSourcePrefId();
-  final sourceList = [sourceId];
-  final response = await client.request(TopHeadlines(
-      sources: sourceList
-  ));
-  final headline = Headline.fromJson(response);
-  headline.log();
-
-  return headline;
-}
-
-
-
-
