@@ -14,27 +14,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 final newsApiRepo = NewsApiRepository();
 
-// TODO: Finalize placement (i.e. move to `helper_functions.dart`)?
-// Helper functions
-
-Future<List<Source>> loadNewsSourcesJson(BuildContext context) async {
-  String data = await DefaultAssetBundle.of(context).loadString('assets/news_sources.json');
-  final jsonResult = json.decode(data);
-  final newsSources = (jsonResult as List).map((e) => Source.fromJson(e)).toList();
-
-  return newsSources;
-}
-
-Future<String> getNewsSourcePrefId() async {
-  final prefs = await SharedPreferences.getInstance();
-  return prefs.getString(Strings.newsSourcePrefKey) ?? Strings.newsSourcePrefIdDefault;
-}
-
-Future<void> setNewsSourcePrefId(String sourceId) async {
-  final prefs = await SharedPreferences.getInstance();
-  prefs.setString(Strings.newsSourcePrefKey, sourceId);
-}
-
 void main() => runApp(DndHeadlinesMainWidget());
 
 class DndHeadlinesMainWidget extends StatelessWidget {
@@ -164,4 +143,22 @@ class HeadlineWidget extends AnimatedWidget {
         .then((headline) => this.headline.setHeadline(headline))
         .catchError((error) => print(error));
   }
+}
+
+Future<List<Source>> loadNewsSourcesJson(BuildContext context) async {
+  String data = await DefaultAssetBundle.of(context).loadString('assets/news_sources.json');
+  final jsonResult = json.decode(data);
+  final newsSources = (jsonResult as List).map((e) => Source.fromJson(e)).toList();
+
+  return newsSources;
+}
+
+Future<String> getNewsSourcePrefId() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getString(Strings.newsSourcePrefKey) ?? Strings.newsSourcePrefIdDefault;
+}
+
+Future<void> setNewsSourcePrefId(String sourceId) async {
+  final prefs = await SharedPreferences.getInstance();
+  prefs.setString(Strings.newsSourcePrefKey, sourceId);
 }
