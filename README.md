@@ -34,3 +34,5 @@ Here are some screenshots for both Android and iOS:
 
 - Renders the deserialized media URL data to populate onto a web view:
 ![image](https://user-images.githubusercontent.com/25012364/80921487-b445fe80-8d44-11ea-8b28-0f05958eba7a.png)
+
+*Curious for more? Spare me a coffee to support what I do today:* <a href="https://www.buymeacoffee.com/DaveNOTDavid" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
