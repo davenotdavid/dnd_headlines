@@ -12,11 +12,12 @@ import 'package:dnd_headlines/model/headline_response.dart';
 import 'package:flutter_picker/Picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final newsApiRepo = NewsApiRepository();
-
-void main() => runApp(DndHeadlinesMainWidget());
+void main() => runApp(DndHeadlinesMainWidget(newsApiRepo: NewsApiRepository()));
 
 class DndHeadlinesMainWidget extends StatelessWidget {
+  final NewsApiRepository newsApiRepo;
+
+  DndHeadlinesMainWidget({@required this.newsApiRepo});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,7 @@ class DndHeadlinesMainWidget extends StatelessWidget {
         future: _initHeadlineData(),
         builder: (BuildContext context, AsyncSnapshot<Headline> snapshot) {
           if (snapshot.hasData) {
-            return HeadlineWidget(headline: snapshot.data);
+            return HeadlineWidget(newsApiRepo: newsApiRepo, headline: snapshot.data);
           } else if (snapshot.hasError) {
             return HelperTextWidget(text: Strings.errorEmptyStateViewGetNewsSources);
           } else {
@@ -47,10 +48,11 @@ class DndHeadlinesMainWidget extends StatelessWidget {
 }
 
 class HeadlineWidget extends AnimatedWidget {
-
+  // TODO: Consider injecting with `provider` package instead
+  final NewsApiRepository newsApiRepo;
   final Headline headline;
 
-  HeadlineWidget({this.headline}) : super(listenable: headline);
+  HeadlineWidget({@required this.newsApiRepo, @required this.headline}) : super(listenable: headline);
   
   @override
   Widget build(BuildContext context) {
