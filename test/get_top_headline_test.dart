@@ -1,7 +1,7 @@
 import 'package:dnd_headlines/api/news_api_repository.dart';
 import 'package:dnd_headlines/model/headline_response.dart';
 import 'package:dnd_headlines/utils/strings.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
