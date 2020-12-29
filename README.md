@@ -6,11 +6,11 @@
 
 🖼 Here are some GIF demos for both iOS and Android:
 
-**iOS (on an iPhone 11 Pro Max)**:
+🍎 **iOS (on an iPhone 11 Pro Max)**:
 
 ![alt tag](https://media.giphy.com/media/jPPwMWAcZPzqDqX3zp/giphy.gif)
 
-**Android (on a Pixel 3 XL)**:
+👾 **Android (on a Pixel 3 XL)**:
 
 ![alt tag](https://media.giphy.com/media/HVokdMOyKEu49UdbrE/giphy.gif)
 
