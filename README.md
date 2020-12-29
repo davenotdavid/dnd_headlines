@@ -4,13 +4,6 @@
 
 💁‍♂️ A Flutter rewrite of the existing [DND Headlines Android app](https://play.google.com/store/apps/details?id=com.davenotdavid.dndheadlines). DND Headlines is a news-feeder app that fetches top news stories from an open source, back-end service, News API, for a certain media outlet, and then displays the extracted news data onto a list UI (where each item is clickable to then display the respective news story within a web view).
 
-📝 A couple of design implementations to note (including, but not limited to):
-- Integrates the News API Dart package within the client to allow getting JSON-decoded data
-- Integrates the Firebase plug-in natively for both Android and iOS for storing/retrieving secure strings such as an API key
-- Applies a native approach for handling JSON serialization
-- Uses Dart’s native async/await for a `Future` object to allow multi-threading
-- Implements Flutter widgets accordingly to output a functional news app
-
 🖼 Here are some GIF demos for both iOS and Android:
 
 **iOS (on an iPhone 11 Pro Max)**:
