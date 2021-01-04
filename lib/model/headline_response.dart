@@ -6,7 +6,7 @@ class Headline extends ChangeNotifier {
   int totalResults;
   List<Article> articles;
 
-  Headline(this.status, this.totalResults, this.articles);
+  Headline({this.status, this.totalResults, this.articles});
 
   Headline.fromJson(Map<String, dynamic> json) :
         status = json['status'],
@@ -58,8 +58,8 @@ class Article {
   final String publishedAt; /// UTC format
   final String content;
 
-  Article(this.source, this.author, this.title, this.description, this.url,
-          this.urlToImage, this.publishedAt, this.content);
+  Article({this.source, this.author, this.title, this.description, this.url,
+          this.urlToImage, this.publishedAt, this.content});
 
   Article.fromJson(Map<String, dynamic> json) :
         source = Source.fromJson(json['source'] as Map),
@@ -86,7 +86,7 @@ class Source {
   final String id;
   final String name;
 
-  Source(this.id, this.name);
+  Source({this.id, this.name});
 
   Source.fromJson(Map<String, dynamic> json) :
         id = json['id'],

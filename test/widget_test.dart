@@ -18,43 +18,67 @@ testWidgets('Navigate to landing page on correct login url',
   });
 });
 */
+// TODO: Go as far as mocking out calls for other news sources?
 
 class MockClient extends Mock implements NewsApiRepository {}
 
 void main() {
-  group('TODO: Get top headlines', () {
+  group('Get top headlines from Google News to test out widgets', () {
     setUp(() {
       SharedPreferences.setMockInitialValues({
         Strings.newsSourcePrefKey: 'google-news'
       });
     });
 
-    testWidgets('TODO: starts off with a progress bar', (WidgetTester tester) async {
+    testWidgets('loads and starts off with a progress bar', (WidgetTester tester) async {
       final prefs = await SharedPreferences.getInstance();
       final client = MockClient();
       final widget = DndHeadlinesMainWidget(newsApiRepo: client);
 
-      when(client.getTopHeadlines(prefs.getString(Strings.newsSourcePrefKey))).thenAnswer((_) async => Headline('ok', 0, []));
+      when(client.getTopHeadlines(prefs.getString(Strings.newsSourcePrefKey))).thenAnswer((_) async => Headline(status: 'ok', totalResults: 0, articles: []));
 
       await tester.pumpWidget(widget);
         
       expect(find.byType(HelperProgressBarWidget), findsOneWidget);
     });
 
-    // TODO: Test for Headline widget
-
-    // TODO: How about for forceful throwing like: `when(client.getTopHeadlines('google-news')).thenAnswer((_) async => throw 'Failed to load response');`
-    testWidgets('TODO: loads and shows an error', (WidgetTester tester) async {
+    testWidgets('loads and shows headline article data', (WidgetTester tester) async {
       final prefs = await SharedPreferences.getInstance();
       final client = MockClient();
       final widget = DndHeadlinesMainWidget(newsApiRepo: client);
 
-      when(client.getTopHeadlines(prefs.getString(Strings.newsSourcePrefKey))).thenAnswer((_) async => Headline('ok', 0, []));
+      when(client.getTopHeadlines(prefs.getString(Strings.newsSourcePrefKey))).thenAnswer((_) async => Headline(status: 'ok', totalResults: 1, articles: [Article(title: 'Test Article Title', source: Source(id: 'google-news', name: 'Google News'), publishedAt: '2020-01-01T00:00:00+00:00')]));
 
       await tester.pumpWidget(widget);
       await tester.pumpAndSettle();
 
-      // TODO: Successful response, but empty list so empty state
+      expect(find.text(Strings.errorEmptyStateViewGetNewsSources), findsNothing);
+      expect(find.text('Test Article Title'), findsOneWidget);
+    });
+
+    testWidgets('loads and shows empty state', (WidgetTester tester) async {
+      final prefs = await SharedPreferences.getInstance();
+      final client = MockClient();
+      final widget = DndHeadlinesMainWidget(newsApiRepo: client);
+
+      when(client.getTopHeadlines(prefs.getString(Strings.newsSourcePrefKey))).thenAnswer((_) async => Headline(status: 'ok', totalResults: 0, articles: []));
+
+      await tester.pumpWidget(widget);
+      await tester.pumpAndSettle();
+
+      expect(find.text(Strings.errorEmptyStateViewGetNewsSources), findsOneWidget);
+    });
+
+    testWidgets('loads and shows empty state from erroring out', (WidgetTester tester) async {
+      final prefs = await SharedPreferences.getInstance();
+      final client = MockClient();
+      final widget = DndHeadlinesMainWidget(newsApiRepo: client);
+
+      when(client.getTopHeadlines(prefs.getString(Strings.newsSourcePrefKey))).thenAnswer((_) async => throw 'Failed to load response');
+
+      await tester.pumpWidget(widget);
+      await tester.pumpAndSettle();
+
       expect(find.text(Strings.errorEmptyStateViewGetNewsSources), findsOneWidget);
     });
 

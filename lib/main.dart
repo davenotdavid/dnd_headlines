@@ -48,7 +48,6 @@ class DndHeadlinesMainWidget extends StatelessWidget {
 }
 
 class HeadlineWidget extends AnimatedWidget {
-  // TODO: Consider injecting with `provider` package instead
   final NewsApiRepository newsApiRepo;
   final Headline headline;
 
