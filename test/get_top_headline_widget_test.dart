@@ -7,23 +7,10 @@ import 'package:dnd_headlines/main.dart';
 import 'package:mockito/mockito.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// TODO: Finalize test file naming
-/* TODO: Wrap with the following?
-testWidgets('Navigate to landing page on correct login url',
-  (WidgetTester tester) async {
-  await tester.runAsync(() async {
-
-    // test code here
-
-  });
-});
-*/
-// TODO: Go as far as mocking out calls for other news sources?
-
 class MockClient extends Mock implements NewsApiRepository {}
 
 void main() {
-  group('Get top headlines from Google News to test out widgets', () {
+  group('Get top headlines from Google News to test out corresponding widgets', () {
     setUp(() {
       SharedPreferences.setMockInitialValues({
         Strings.newsSourcePrefKey: 'google-news'
@@ -83,7 +70,5 @@ void main() {
     });
 
   });
-
-
 
 }
