@@ -12,6 +12,7 @@ class HelperWebViewWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: Key('helper_webview_widget'),
       appBar: AppBar(
         title: Text(appBarTitle)
       ),
