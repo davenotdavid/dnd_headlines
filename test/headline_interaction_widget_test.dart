@@ -51,7 +51,7 @@ void main() {
 
       await tester.drag(find.byKey(Key(Strings.keyWidgetRefreshIndicatorHeadline)), Offset(0.0, 500.0));
 
-      when(client.getTopHeadlines(prefs.getString(Strings.newsSourcePrefKey))).thenAnswer((_) async => Headline(status: 'ok', totalResults: 1, articles: [Article(title: 'NEW Test Article Title', source: Source(id: 'google-news', name: 'Google News'), publishedAt: '2020-01-01T00:00:00+00:00', url: 'https://www.google.com')]));
+      when(client.getTopHeadlines(prefs.getString(Strings.newsSourcePrefKey))).thenAnswer((_) async => Headline(status: 'ok', totalResults: 1, articles: [Article(title: 'Refreshed: Test Article Title', source: Source(id: 'google-news', name: 'Google News'), publishedAt: '2020-01-01T00:00:00+00:00', url: 'https://www.google.com')]));
 
       await tester.pumpAndSettle();
 
