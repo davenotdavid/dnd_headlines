@@ -58,7 +58,29 @@ void main() {
       expect(find.text('NEW Test Article Title'), findsOneWidget);
     });
 
-    // TODO: Picker dialog
+    testWidgets('select diff news source from picker dialog widget', (WidgetTester tester) async {
+      final prefs = await SharedPreferences.getInstance();
+      final client = MockClient();
+      final widget = DndHeadlinesMainWidget(newsApiRepo: client);
+
+      when(client.getTopHeadlines(prefs.getString(Strings.newsSourcePrefKey))).thenAnswer((_) async => Headline(status: 'ok', totalResults: 1, articles: [Article(title: 'Test Article Title', source: Source(id: 'google-news', name: 'Google News'), publishedAt: '2020-01-01T00:00:00+00:00', url: 'https://www.google.com')]));
+
+      await tester.pumpWidget(widget);
+      await tester.pumpAndSettle();
+      
+      expect(find.text(Strings.errorEmptyStateViewGetNewsSources), findsNothing);
+      expect(find.text('Test Article Title'), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.collections_bookmark));
+      await tester.pumpAndSettle();
+
+      when(client.getTopHeadlines('abc-news')).thenAnswer((_) async => Headline(status: 'ok', totalResults: 1, articles: [Article(title: 'ABC News: Test Article Title', source: Source(id: 'abc-news', name: 'ABC News'), publishedAt: '2020-01-01T00:00:00+00:00', url: 'https://abcnews.com')]));
+
+      await tester.tap(find.text('Confirm'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('ABC News: Test Article Title'), findsOneWidget);
+    });
 
   });
 
