@@ -85,6 +85,7 @@ class HeadlineWidget extends AnimatedWidget {
     final articles = headline.articles;
 
     return RefreshIndicator(
+      key: Key(Strings.keyWidgetRefreshIndicatorHeadline),
       child: articles.isNotEmpty
         ? ListView.builder(
           itemCount: articles.length,

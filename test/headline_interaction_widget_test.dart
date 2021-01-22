@@ -33,10 +33,32 @@ void main() {
       await tester.tap(find.widgetWithText(ListTile, 'Test Article Title'));
       await tester.pumpAndSettle();
 
-      expect(find.byKey(Key('helper_webview_widget')), findsOneWidget);
+      expect(find.byKey(Key(Strings.keyWidgetHelperWebview)), findsOneWidget);
     });
 
-    // TODO: More, more, and MORE!!!
+    testWidgets('swipe list view to refresh article data', (WidgetTester tester) async {
+      final prefs = await SharedPreferences.getInstance();
+      final client = MockClient();
+      final widget = DndHeadlinesMainWidget(newsApiRepo: client);
+
+      when(client.getTopHeadlines(prefs.getString(Strings.newsSourcePrefKey))).thenAnswer((_) async => Headline(status: 'ok', totalResults: 1, articles: [Article(title: 'Test Article Title', source: Source(id: 'google-news', name: 'Google News'), publishedAt: '2020-01-01T00:00:00+00:00', url: 'https://www.google.com')]));
+
+      await tester.pumpWidget(widget);
+      await tester.pumpAndSettle();
+      
+      expect(find.text(Strings.errorEmptyStateViewGetNewsSources), findsNothing);
+      expect(find.text('Test Article Title'), findsOneWidget);
+
+      await tester.drag(find.byKey(Key(Strings.keyWidgetRefreshIndicatorHeadline)), Offset(0.0, 500.0));
+
+      when(client.getTopHeadlines(prefs.getString(Strings.newsSourcePrefKey))).thenAnswer((_) async => Headline(status: 'ok', totalResults: 1, articles: [Article(title: 'NEW Test Article Title', source: Source(id: 'google-news', name: 'Google News'), publishedAt: '2020-01-01T00:00:00+00:00', url: 'https://www.google.com')]));
+
+      await tester.pumpAndSettle();
+
+      expect(find.text('NEW Test Article Title'), findsOneWidget);
+    });
+
+    // TODO: Picker dialog
 
   });
 
