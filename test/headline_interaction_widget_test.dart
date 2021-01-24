@@ -55,7 +55,7 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      expect(find.text('NEW Test Article Title'), findsOneWidget);
+      expect(find.text('Refreshed: Test Article Title'), findsOneWidget);
     });
 
     testWidgets('select diff news source from picker dialog widget', (WidgetTester tester) async {
