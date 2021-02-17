@@ -57,6 +57,8 @@ class HeadlineWidget extends AnimatedWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        // TODO: Official?
+        key: Key('key_headline_app_bar'),
         title: Text(headline.getArticleSourceName() ?? Strings.appName),
         actions: <Widget>[
           IconButton(
