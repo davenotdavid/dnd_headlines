@@ -1,6 +1,6 @@
 # DND Headlines [![Build Status](https://app.bitrise.io/app/fc857c06d9e15704/status.svg?token=V1rAoQ3inC0Sm_DlS-N3uQ&branch=flutter)](https://app.bitrise.io/app/fc857c06d9e15704)
 
-**👉 For a step-by-step guide in how to replicate this project somewhat, tutorial videos can be found in this YouTube playlist here: https://www.youtube.com/playlist?list=PLeDXK3HCrf1Y5Bz-Js4PQU4o3EV7FxaBM**
+**👉 For a step-by-step guide in how to replicate this project somewhat, tutorial videos can be found in this YouTube playlist here: [https://www.youtube.com/playlist?list=PLeDXK3HCrf1Y5Bz-Js4PQU4o3EV7FxaBM](https://youtube.com/playlist?list=PLeDXK3HCrf1ZFfMCa1MM2K5ksiWEZLmo1)**
 
 💁‍♂️ A Flutter rewrite of the existing [DND Headlines Android app](https://play.google.com/store/apps/details?id=com.davenotdavid.dndheadlines). DND Headlines is a news-feeder app that fetches top news stories from an open source, back-end service, News API, for a certain media outlet, and then displays the extracted news data onto a list UI (where each item is clickable to then display the respective news story within a web view).
 
